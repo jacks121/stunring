@@ -1,0 +1,5 @@
+time="2023-05-06T22:12:19+08:00" level=info msg="Failed to connect to Redis: failed to connect to Redis: dial tcp [::1]:6379: connect: connection refused"
+time="2023-05-06T22:12:34+08:00" level=info msg="Failed to connect to Redis: failed to connect to Redis: dial tcp [::1]:6379: connect: connection refused"
+time="2023-05-06T22:33:20+08:00" level=info msg="Failed to connect to Redis: failed to connect to Redis: dial tcp [::1]:6379: connect: connection refused"
+time="2023-05-06T22:33:37+08:00" level=info msg="Failed to connect to Redis: failed to connect to Redis: dial tcp [::1]:6379: connect: connection refused"
+time="2023-05-06T17:01:33Z" level=info msg="Failed to connect to Redis: failed to connect to Redis: dial tcp 127.0.0.1:6379: connect: connection refused"

@@ -1,0 +1,4 @@
+time="2023-05-13T00:05:14+08:00" level=info msg="fetch data error: failed to parse '0.00' as default value for float, got error: strconv.ParseFloat: parsing \"'0.00'\": invalid syntax"
+time="2023-05-13T00:07:16+08:00" level=info msg="fetch data error: failed to parse '0.00' as default value for float, got error: strconv.ParseFloat: parsing \"'0.00'\": invalid syntax"
+time="2023-05-13T00:10:06+08:00" level=info msg="fetch data error: failed to parse '0.00' as default value for float, got error: strconv.ParseFloat: parsing \"'0.00'\": invalid syntax"
+time="2023-05-13T00:10:25+08:00" level=info msg="fetch data error: failed to parse '0.00' as default value for float, got error: strconv.ParseFloat: parsing \"'0.00'\": invalid syntax"

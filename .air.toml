@@ -1,0 +1,21 @@
+# .air.toml
+
+# 应用程序的入口文件
+cmd = "go run main.go"
+
+# 需要监视的文件扩展名
+include_ext = ["go", "tpl", "tmpl", "html"]
+
+# 需要监视的文件夹
+include_dir = ["."]
+
+# 忽略监视的文件夹
+exclude_dir = ["vendor", "node_modules"]
+
+# 忽略监视的文件
+exclude_file = []
+
+# 自定义监视规则
+[[rules]]
+  rule = ".*" # 匹配任何文件
+  command = "echo 'Change detected, reloading'"

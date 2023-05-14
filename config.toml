@@ -1,0 +1,9 @@
+JWT_SECRET = "123456789"
+
+[Database]
+User = "root"
+Password = "root"
+Host = "localhost"
+Port = "3306"
+Name = "swetelove"
+Charset = "utf8mb4"
