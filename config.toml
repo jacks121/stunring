@@ -7,3 +7,10 @@ Host = "localhost"
 Port = "3306"
 Name = "swetelove"
 Charset = "utf8mb4"
+
+[Redis]
+Addr = "localhost:6379"
+DB = "0"
+
+[ES]
+Url = "http://localhost:9200"
