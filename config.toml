@@ -2,15 +2,25 @@ JWT_SECRET = "123456789"
 
 [Database]
 User = "root"
-Password = "root"
-Host = "localhost"
-Port = "3306"
+Password = "123456"
+Host = "127.0.0.1"
+Port = "8306"
 Name = "swetelove"
 Charset = "utf8mb4"
 
 [Redis]
-Addr = "localhost:6379"
+Addr = "localhost:8379"
 DB = "0"
 
 [ES]
 Url = "http://localhost:9200"
+
+[Templates]
+MobileUserAgent   = "Mobile"
+PCPrefix          = "pc/"
+MobilePrefix      = "mobile/"
+IndexURL          = "/index"
+StaticURL         = "/static"
+StaticPath        = "./static"
+TemplatesPath     = "templates/**/*"
+TemplatePrefixKey = "template_prefix"

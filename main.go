@@ -11,7 +11,7 @@ func main() {
 	defer database.CloseConnections()
 
 	router := routers.SetupRouter()
-	err := router.Run(":8080")
+	err := router.Run("0.0.0.0:8080")
 	if err != nil {
 		utils.LogError.Printf("Failed to start server: %v", err)
 	}
