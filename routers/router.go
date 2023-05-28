@@ -4,7 +4,6 @@ package routers
 import (
 	"strings"
 	"swetelove/controller"
-	v1 "swetelove/routers/v1"
 	"swetelove/utils"
 
 	"github.com/gin-gonic/gin"
@@ -27,12 +26,8 @@ func SetupRouter() *gin.Engine {
 
 	router.Use(utils.CorsMiddleware())
 	router.LoadHTMLGlob("templates/**/*")
-	router.GET("/index", controller.RenderIndexPage)
+	router.GET("/index", controller.Index)
 	router.Static("/static", "./static")
-
-	apiV1 := router.Group("/api/v1")
-
-	v1.RegisterRoutes(apiV1)
 
 	return router
 }

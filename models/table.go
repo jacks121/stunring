@@ -60,7 +60,9 @@ type Image struct {
 
 type Category struct {
 	gorm.Model
-	CategoryName string    `gorm:"type:varchar(255)"`
+	ParentID     int
+	CategoryName string
+	URL          string
 	Products     []Product `gorm:"many2many:product_categories;"`
 	Images       []Image   `gorm:"polymorphic:Imageable;"`
 }
