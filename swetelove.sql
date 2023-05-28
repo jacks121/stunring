@@ -1,5 +1,5 @@
 -- Database export via SQLPro (https://www.sqlprostudio.com/allapps.html)
--- Exported by joe at 28-05-2023 17:11.
+-- Exported by joe at 28-05-2023 20:21.
 -- WARNING: This file may contain descructive statements such as DROPs.
 -- Please ensure that you are running the script at the proper location.
 
@@ -59,29 +59,42 @@ CREATE TABLE `categories` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='分类表';
 
--- Inserting 18 rows into categories
+-- Inserting 31 rows into categories
 -- Insert batch #1
 INSERT INTO categories (id, parent_id, category_name, url, created_at, updated_at, deleted_at) VALUES
-(1, 0, 'Wedding', NULL, NULL, NULL, NULL),
-(2, 1, 'Engagement Rings', NULL, NULL, NULL, NULL),
-(3, 1, 'Wedding Band', NULL, NULL, NULL, NULL),
-(4, 1, 'Wedding Set', NULL, NULL, NULL, NULL),
-(5, 1, 'Wedding Rings', NULL, NULL, NULL, NULL),
-(6, 1, 'Jewelry Set', NULL, NULL, NULL, NULL),
-(7, 1, 'Gift Packaging', NULL, NULL, NULL, NULL),
-(8, 0, 'Earrings', NULL, NULL, NULL, NULL),
-(9, 8, 'Studs', NULL, NULL, NULL, NULL),
-(10, 8, 'Drops', NULL, NULL, NULL, NULL),
-(11, 8, 'Hoops', NULL, NULL, NULL, NULL),
-(12, 0, 'Necklaces', NULL, NULL, NULL, NULL),
-(13, 12, 'Pendants', NULL, NULL, NULL, NULL),
-(14, 12, 'Chokers & Tennis Necklace', NULL, NULL, NULL, NULL),
-(15, 12, 'Lariat & Y Necklace', NULL, NULL, NULL, NULL),
-(16, 12, 'Layered Necklace', NULL, NULL, NULL, NULL),
-(17, 12, 'Pear Necklace', NULL, NULL, NULL, NULL),
-(18, 0, 'Bracelets', NULL, NULL, NULL, NULL);
+(1, 0, 'Wedding', '/wedding.html', NULL, NULL, NULL),
+(2, 1, 'Engagement Rings', '/wedding/engagement-rings.html', NULL, NULL, NULL),
+(3, 1, 'Wedding Band', '/wedding/wedding-band.html', NULL, NULL, NULL),
+(4, 1, 'Wedding Set', '/wedding/wedding-set.html', NULL, NULL, NULL),
+(5, 1, 'Wedding Rings', '/wedding/wedding-rings.html', NULL, NULL, NULL),
+(6, 1, 'Jewelry Set', '/wedding/jewelry-set.html', NULL, NULL, NULL),
+(7, 1, 'Gift Packaging', '/wedding/gift-packaging.html', NULL, NULL, NULL),
+(8, 0, 'Earrings', '/earrings.html', NULL, NULL, NULL),
+(9, 8, 'Studs', '/earrings/studs.html', NULL, NULL, NULL),
+(10, 8, 'Drops', '/earrings/drops.html', NULL, NULL, NULL),
+(11, 8, 'Hoops', '/earrings/hoops.html', NULL, NULL, NULL),
+(12, 0, 'Necklaces', '/necklaces.html', NULL, NULL, NULL),
+(13, 12, 'Pendants', '/necklaces/pendants.html', NULL, NULL, NULL),
+(14, 12, 'Chokers & Tennis Necklace', '/necklaces/chokers-tennis-necklace.html', NULL, NULL, NULL),
+(15, 12, 'Lariat & Y Necklace', '/necklaces/lariat-y-necklace.html', NULL, NULL, NULL),
+(16, 12, 'Layered Necklace', '/necklaces/layered-necklace.html', NULL, NULL, NULL),
+(17, 12, 'Pear Necklace', '/necklaces/statement-necklace.html', NULL, NULL, NULL),
+(18, 0, 'Bracelets', '/bracelets.html', NULL, NULL, NULL),
+(19, 0, 'Men''s', '/men.html', NULL, NULL, NULL),
+(20, 19, 'Men''s Rings', '/men/men-s-rings.html', NULL, NULL, NULL),
+(21, 19, 'Men''s Necklaces', '/men/men-s-necklaces.html', NULL, NULL, NULL),
+(22, 19, 'Cufflinks', '/men/cufflinks.html', NULL, NULL, NULL),
+(23, 0, 'COLLECTION', '/collection.html', NULL, NULL, NULL),
+(24, 23, 'Back to School', '/collection/back-to-school.html', NULL, NULL, NULL),
+(25, 23, 'The Spirit Snake', '/collection/the-spirit-snake.html', NULL, NULL, NULL),
+(26, 23, 'The Vintage Art Deco', '/collection/the-vintage-art-deco-ring.html', NULL, NULL, NULL),
+(27, 23, 'The Snow Band Ring', '/collection/the-snow-band-ring.html', NULL, NULL, NULL),
+(28, 23, 'The Starry Night', '/collection/the-starry-night.html', NULL, NULL, NULL),
+(29, 23, 'Mother''s Day', '/collection/mother-s-day.html', NULL, NULL, NULL),
+(30, 23, 'Merry Christmas', '/collection/merry-christmas.html', NULL, NULL, NULL),
+(31, 23, 'Father''s Day', '/collection/father-s-day.html', NULL, NULL, NULL);
 
 -- END TABLE categories
 
