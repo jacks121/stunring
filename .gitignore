@@ -7,3 +7,4 @@ config.toml
 # Ignore tmp directory
 /tmp/
 
+.DS_Store
