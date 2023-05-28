@@ -60,11 +60,12 @@ type Image struct {
 
 type Category struct {
 	gorm.Model
-	ParentID     int
-	CategoryName string
-	URL          string
-	Products     []Product `gorm:"many2many:product_categories;"`
-	Images       []Image   `gorm:"polymorphic:Imageable;"`
+	ParentID      int
+	CategoryName  string
+	URL           string
+	Products      []Product   `gorm:"many2many:product_categories;"`
+	Images        []Image     `gorm:"polymorphic:Imageable;"`
+	Subcategories []*Category `gorm:"foreignkey:ParentID"`
 }
 
 type ProductCategory struct {

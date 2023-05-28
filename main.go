@@ -10,6 +10,7 @@ func main() {
 	database.Init()
 	defer database.CloseConnections()
 
+	routers.Init() // Load configuration
 	router := routers.SetupRouter()
 	err := router.Run("0.0.0.0:8080")
 	if err != nil {

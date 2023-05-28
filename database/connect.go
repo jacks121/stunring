@@ -28,6 +28,10 @@ func Init() {
 	connectElasticsearch(config)
 }
 
+func GetContext() context.Context {
+	return ctx
+}
+
 func connectRedis(config *utils.Config) {
 	dbString := config.Get("Redis.DB")
 	dbInt, err := strconv.Atoi(dbString)
