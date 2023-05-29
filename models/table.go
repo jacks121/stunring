@@ -74,3 +74,9 @@ type ProductCategory struct {
 	CategoryID uint
 	ParentID   uint
 }
+
+type Currency struct {
+	gorm.Model
+	Code     string  `gorm:"type:varchar(255)"`
+	Exchange float64 `gorm:"type:decimal(10,2)"`
+}

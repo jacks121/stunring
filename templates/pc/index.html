@@ -289,51 +289,13 @@
                                     </strong>
                                 </div>
                                 <ul class="dropdown switcher-dropdown" data-target="dropdown">
-                                    <li class="switcher-option">
-                                        <a class="currency currency-AUD " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"AUD","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>AUD
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-GBP " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"GBP","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>GBP
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-CAD " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"CAD","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>CAD
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-EUR " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"EUR","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>EUR
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-JPY " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"JPY","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>JPY
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-MXN " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"MXN","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>MXN
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-NZD " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"NZD","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>NZD
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-PHP " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"PHP","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>PHP
-                                        </a>
-                                    </li>
-                                    <li class="switcher-option">
-                                        <a class="currency currency-SGD " href="#"
-                                            data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"SGD","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>SGD
-                                        </a>
-                                    </li>
+                                    {{range .Currency}}
+                                        <li class="switcher-option">
+                                            <a class="currency currency-{{.Code}}" href="#"
+                                                data-post='{"action":"https:\/\/www.stunring.com\/directory\/currency\/switch\/","data":{"currency":"{{.Code}}","uenc":"aHR0cHM6Ly93d3cuc3R1bnJpbmcuY29tLw,,"}}'>{{.Code}}
+                                            </a>
+                                        </li>
+                                    {{end}}
                                 </ul>
                             </div>
                         </div>
