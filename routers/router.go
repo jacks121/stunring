@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"fmt"
 	"net/http"
 	"swetelove/controller"
 	"swetelove/database"
@@ -72,8 +71,6 @@ func SetupRouter() *gin.Engine {
 				break
 			}
 		}
-		fmt.Println("xxxxxxxxxxxx")
-		fmt.Println(categoryID)
 		// 如果找到匹配的分类 URL，则调用 categoryShow 处理函数并传递分类 ID
 		if categoryID != 0 {
 			controller.CategoryShow(c, categoryID)
