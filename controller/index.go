@@ -22,5 +22,6 @@ func Index(c *gin.Context) {
 
 	c.HTML(http.StatusOK, prefix+"index.tmpl", gin.H{
 		"CategoryTree": headerInfo.CategoryTree,
+		"Currency":     headerInfo.Currencies,
 	})
 }
