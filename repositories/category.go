@@ -117,3 +117,33 @@ func (r *CategoryRepository) findSubcategories(category *models.Category) error 
 
 	return nil
 }
+
+func (r *CategoryRepository) GetCategoriesByIds(ids []int) ([]*models.Category, error) {
+	var categories []*models.Category
+
+	// Generate Redis key based on ids
+	redisKey := fmt.Sprintf("categories:%v", ids)
+	val, err := r.Redis.Get(r.Ctx, redisKey).Result()
+	if err == nil {
+		if err = json.Unmarshal([]byte(val), &categories); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal categories from Redis: %w", err)
+		}
+		return categories, nil
+	}
+
+	// Fetch from MySQL
+	if err = r.DB.Preload("Images").Where("id IN ?", ids).Find(&categories).Error; err != nil {
+		return nil, fmt.Errorf("failed to get categories from DB: %w", err)
+	}
+
+	// Update Redis
+	redisVal, err := json.Marshal(categories)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal categories for Redis: %w", err)
+	}
+	if err = r.Redis.Set(r.Ctx, redisKey, redisVal, 0).Err(); err != nil {
+		return nil, fmt.Errorf("failed to set categories in Redis: %w", err)
+	}
+
+	return categories, nil
+}
