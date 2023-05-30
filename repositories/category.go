@@ -38,7 +38,7 @@ func (r *CategoryRepository) GetAllCategories() ([]*models.Category, error) {
 	}
 
 	// Fetch from MySQL
-	if err = r.DB.Find(&categories).Error; err != nil {
+	if err = r.DB.Preload("Images").Find(&categories).Error; err != nil {
 		return nil, fmt.Errorf("failed to get categories from DB: %w", err)
 	}
 
@@ -87,7 +87,7 @@ func (r *CategoryRepository) GetCategoryTree() ([]*models.Category, error) {
 func (r *CategoryRepository) getRootCategories() ([]*models.Category, error) {
 	var rootCategories []*models.Category
 
-	if err := r.DB.Where("parent_id = 0").Find(&rootCategories).Error; err != nil {
+	if err := r.DB.Preload("Images").Where("parent_id = 0").Find(&rootCategories).Error; err != nil {
 		return nil, fmt.Errorf("failed to get root categories from DB: %w", err)
 	}
 
@@ -103,7 +103,7 @@ func (r *CategoryRepository) getRootCategories() ([]*models.Category, error) {
 func (r *CategoryRepository) findSubcategories(category *models.Category) error {
 	var subcategories []*models.Category
 
-	if err := r.DB.Where("parent_id = ?", category.ID).Find(&subcategories).Error; err != nil {
+	if err := r.DB.Preload("Images").Where("parent_id = ?", category.ID).Find(&subcategories).Error; err != nil {
 		return fmt.Errorf("failed to get subcategories from DB: %w", err)
 	}
 
