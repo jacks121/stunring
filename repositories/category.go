@@ -20,32 +20,23 @@ func NewCategoryRepository() *CategoryRepository {
 // GetAllCategories 获取所有分类
 func (r *CategoryRepository) GetAllCategories() ([]*models.Category, error) {
 	var categories []*models.Category
-
-	// Try to fetch from Redis
 	redisKey := "categories"
-	val, err := r.Redis.Get(r.Ctx, redisKey).Result()
-	if err == nil {
-		if err = json.Unmarshal([]byte(val), &categories); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal categories from Redis: %w", err)
+	if err := r.FetchFromRedis(redisKey, &categories); err != nil {
+		// 如果从Redis获取数据失败，就从数据库中获取数据
+		if err := r.FetchFromDB(&categories); err != nil {
+			return nil, err
 		}
-		return categories, nil
+		// 将获取到的数据写入Redis
+		if err := r.StoreInRedis(redisKey, &categories); err != nil {
+			return nil, err
+		}
 	}
-
-	// Fetch from MySQL
-	if err = r.DB.Preload("Images").Find(&categories).Error; err != nil {
-		return nil, fmt.Errorf("failed to get categories from DB: %w", err)
-	}
-
-	// Update Redis
-	redisVal, err := json.Marshal(categories)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal categories for Redis: %w", err)
-	}
-	if err = r.Redis.Set(r.Ctx, redisKey, redisVal, 0).Err(); err != nil {
-		return nil, fmt.Errorf("failed to set categories in Redis: %w", err)
-	}
-
 	return categories, nil
+}
+
+func (r *CategoryRepository) FetchFromDB(categories *[]*models.Category) error {
+	// 在这里，我们可以添加特定的查询逻辑，比如预加载Images
+	return r.DB.Preload("Images").Find(categories).Error
 }
 
 // GetCategoryTree 获取分类树
