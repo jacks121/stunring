@@ -41,33 +41,29 @@ func (r *CategoryRepository) FetchFromDB(categories *[]*models.Category) error {
 
 // GetCategoryTree 获取分类树
 func (r *CategoryRepository) GetCategoryTree() ([]*models.Category, error) {
-	// 尝试从 Redis 获取分类树
+	var categoryTree []*models.Category
 	redisKey := "category_tree"
-	val, err := r.Redis.Get(r.Ctx, redisKey).Result()
-	if err == nil {
-		var categoryTree []*models.Category
-		if err = json.Unmarshal([]byte(val), &categoryTree); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal category tree from Redis: %w", err)
+	if err := r.FetchFromRedis(redisKey, &categoryTree); err != nil {
+		// 如果从Redis获取数据失败，就从数据库中获取数据
+		if err := r.FetchTreeFromDB(&categoryTree); err != nil {
+			return nil, err
 		}
-		return categoryTree, nil
+		// 将获取到的数据写入Redis
+		if err := r.StoreInRedis(redisKey, &categoryTree); err != nil {
+			return nil, err
+		}
 	}
+	return categoryTree, nil
+}
 
-	// 从数据库获取分类树
+// FetchTreeFromDB 从数据库中获取分类树
+func (r *CategoryRepository) FetchTreeFromDB(categoryTree *[]*models.Category) error {
 	rootCategories, err := r.getRootCategories()
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	// 更新 Redis 中的分类树
-	redisVal, err := json.Marshal(rootCategories)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal category tree for Redis: %w", err)
-	}
-	if err = r.Redis.Set(r.Ctx, redisKey, redisVal, 0).Err(); err != nil {
-		return nil, fmt.Errorf("failed to set category tree in Redis: %w", err)
-	}
-
-	return rootCategories, nil
+	*categoryTree = rootCategories
+	return nil
 }
 
 // getRootCategories 获取根分类
