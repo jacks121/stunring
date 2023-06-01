@@ -63,6 +63,7 @@ type Category struct {
 	ParentID      int
 	CategoryName  string
 	URL           string
+	Link          string
 	Products      []Product   `gorm:"many2many:product_categories;"`
 	Images        []Image     `gorm:"polymorphic:Imageable;"`
 	Subcategories []*Category `gorm:"foreignkey:ParentID"`
@@ -79,4 +80,10 @@ type Currency struct {
 	gorm.Model
 	Code     string  `gorm:"type:varchar(255)"`
 	Exchange float64 `gorm:"type:decimal(10,2)"`
+}
+
+type Advertisement struct {
+	gorm.Model
+	Code   string
+	Images []Image `gorm:"polymorphic:Imageable;"`
 }
