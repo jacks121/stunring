@@ -2,14 +2,13 @@ package controller
 
 import (
 	"net/http"
-	"swetelove/database"
 	"swetelove/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Render(c *gin.Context, templateName string, data gin.H) {
-	commonService := service.NewCommonService(database.MysqlDB, database.RedisClient, database.GetContext())
+	commonService := service.NewCommonService()
 	headerInfo, err := commonService.GetHeaderInfo()
 
 	if err != nil {

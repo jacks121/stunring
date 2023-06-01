@@ -1,6 +1,8 @@
 package models
 
 import (
+	"encoding/json"
+
 	"gorm.io/gorm"
 )
 
@@ -54,6 +56,7 @@ type Review struct {
 type Image struct {
 	gorm.Model
 	ImageURL      string `gorm:"type:varchar(255)"`
+	Link          string
 	ImageableID   uint
 	ImageableType string
 }
@@ -63,7 +66,6 @@ type Category struct {
 	ParentID      int
 	CategoryName  string
 	URL           string
-	Link          string
 	Products      []Product   `gorm:"many2many:product_categories;"`
 	Images        []Image     `gorm:"polymorphic:Imageable;"`
 	Subcategories []*Category `gorm:"foreignkey:ParentID"`
@@ -86,4 +88,11 @@ type Advertisement struct {
 	gorm.Model
 	Code   string
 	Images []Image `gorm:"polymorphic:Imageable;"`
+}
+
+type Collection struct {
+	gorm.Model
+	Name string
+	Type int
+	Rule json.RawMessage
 }

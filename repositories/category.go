@@ -1,29 +1,23 @@
 package repositories
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"swetelove/models"
-
-	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 )
 
 type CategoryRepository struct {
-	DB    *gorm.DB
-	Redis *redis.Client
-	Ctx   context.Context
+	BaseRepository
 }
 
-func NewCategoryRepository(db *gorm.DB, redis *redis.Client, ctx context.Context) *CategoryRepository {
+// NewCategoryRepository 创建 CategoryRepository 实例
+func NewCategoryRepository() *CategoryRepository {
 	return &CategoryRepository{
-		DB:    db,
-		Redis: redis,
-		Ctx:   ctx,
+		BaseRepository: *NewBaseRepository(),
 	}
 }
 
+// GetAllCategories 获取所有分类
 func (r *CategoryRepository) GetAllCategories() ([]*models.Category, error) {
 	var categories []*models.Category
 
@@ -54,6 +48,7 @@ func (r *CategoryRepository) GetAllCategories() ([]*models.Category, error) {
 	return categories, nil
 }
 
+// GetCategoryTree 获取分类树
 func (r *CategoryRepository) GetCategoryTree() ([]*models.Category, error) {
 	// 尝试从 Redis 获取分类树
 	redisKey := "category_tree"
@@ -84,6 +79,7 @@ func (r *CategoryRepository) GetCategoryTree() ([]*models.Category, error) {
 	return rootCategories, nil
 }
 
+// getRootCategories 获取根分类
 func (r *CategoryRepository) getRootCategories() ([]*models.Category, error) {
 	var rootCategories []*models.Category
 
@@ -100,6 +96,7 @@ func (r *CategoryRepository) getRootCategories() ([]*models.Category, error) {
 	return rootCategories, nil
 }
 
+// findSubcategories 递归查找子分类
 func (r *CategoryRepository) findSubcategories(category *models.Category) error {
 	var subcategories []*models.Category
 
@@ -118,6 +115,7 @@ func (r *CategoryRepository) findSubcategories(category *models.Category) error 
 	return nil
 }
 
+// GetCategoriesByIds 根据分类 ID 获取分类列表
 func (r *CategoryRepository) GetCategoriesByIds(ids []int) ([]*models.Category, error) {
 	var categories []*models.Category
 

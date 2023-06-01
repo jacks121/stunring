@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -9,25 +8,20 @@ import (
 	"swetelove/models"
 	"time"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/olivere/elastic/v7"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 type ProductRepository struct {
-	DB    *gorm.DB
-	Redis *redis.Client
-	ES    *elastic.Client
-	Ctx   context.Context
+	BaseRepository
+	ES *elastic.Client
 }
 
-func NewProductRepository(db *gorm.DB, redis *redis.Client, es *elastic.Client, ctx context.Context) *ProductRepository {
+func NewProductRepository(es *elastic.Client) *ProductRepository {
 	return &ProductRepository{
-		DB:    db,
-		Redis: redis,
-		ES:    es,
-		Ctx:   ctx,
+		BaseRepository: *NewBaseRepository(),
+		ES:             es,
 	}
 }
 

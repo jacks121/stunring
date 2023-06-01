@@ -1,26 +1,18 @@
 package repositories
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"swetelove/models"
-
-	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 )
 
 type CurrencyRepository struct {
-	DB    *gorm.DB
-	Redis *redis.Client
-	Ctx   context.Context
+	BaseRepository
 }
 
-func NewCurrencyRepository(db *gorm.DB, redis *redis.Client, ctx context.Context) *CurrencyRepository {
+func NewCurrencyRepository() *CurrencyRepository {
 	return &CurrencyRepository{
-		DB:    db,
-		Redis: redis,
-		Ctx:   ctx,
+		BaseRepository: *NewBaseRepository(),
 	}
 }
 

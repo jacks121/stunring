@@ -279,8 +279,8 @@
             </div>
         </div>
         <amp-carousel height="700" width="1920" layout="responsive" type="slides" loop autoplay delay="5000">
-            <a href="https://www.stunring.com/early-black-friday-sale.html">
-                <amp-img src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/Wedding_banner-pc.jpg"
+            <a href="{{(index .BannerAd.Images 0).Link}}">
+                <amp-img src="{{(index .BannerAd.Images 0).ImageURL}}"
                     alt="Fall sales 2018" layout="responsive" width="1220" height="450"></amp-img>
             </a>
         </amp-carousel>
@@ -1427,64 +1427,29 @@
                             class="title text-center font-sans text-base md:text-2xl uppercase tracking-widest my-5 md:my-10 font-extrabold ">
                             SHOP BY CATEGORY</div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {{range $i, $image := .IndexCategoriesAd.Images}}
+                            {{if lt $i 4}}
                             <div class="overflow-hidden">
-                                <a href="https://www.stunring.com/wedding/engagement-rings.html">
+                                <a href="{{$image.Link}}">
                                     <amp-img layout="responsive" width="605" height="300"
                                         class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                        src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/ENGAGEMENT_RINGS.jpg"></amp-img>
+                                        src="{{$image.ImageURL}}"></amp-img>
                                 </a>
                             </div>
-                            <div class="overflow-hidden">
-                                <a href="https://www.stunring.com/wedding/wedding-band.html">
-                                    <amp-img layout="responsive" width="605" height="300"
-                                        class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                        src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/WEDDING_BAND.jpg"></amp-img>
-                                </a>
-                            </div>
-                            <div class="overflow-hidden">
-                                <a href="https://www.stunring.com/wedding/wedding-set.html">
-                                    <amp-img layout="responsive" width="605" height="300"
-                                        class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                        src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/WEDDING_SET.jpg"></amp-img>
-                                </a>
-                            </div>
-                            <div class="overflow-hidden">
-                                <a href="https://www.stunring.com/earrings.html">
-                                    <amp-img layout="responsive" width="605" height="300"
-                                        class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                        src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/EARRINGS.jpg"></amp-img>
-                                </a>
-                            </div>
+                            {{if eq $i 3}}
                             <div class="md:col-span-2">
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                    <div class="overflow-hidden">
-                                        <a href="https://www.stunring.com/necklaces.html">
-                                            <amp-img layout="responsive" width="298" height="300"
-                                                class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                                src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/NECKLACES.jpg"></amp-img>
-                                        </a>
-                                    </div>
-                                    <div class="overflow-hidden">
-                                        <a href="https://www.stunring.com/bracelets.html">
-                                            <amp-img layout="responsive" width="298" height="300"
-                                                class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                                src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/BRACELETS.jpg"></amp-img>
-                                        </a>
-                                    </div>
-                                    <div class="overflow-hidden">
-                                        <a href="https://www.stunring.com/men.html">
-                                            <amp-img layout="responsive" width="298" height="300"
-                                                class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                                src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/MEN_S.jpg"></amp-img>
-                                        </a>
-                                    </div>
-                                    <div class="overflow-hidden">
-                                        <a href="https://www.stunring.com/wedding/wedding-rings.html">
-                                            <amp-img layout="responsive" width="298" height="300"
-                                                class="transition duration-500 ease-in-out transform hover:scale-105 "
-                                                src="https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/WEDDING_RINGS.jpg"></amp-img>
-                                        </a>
-                                    </div>
+                            {{end}}
+                            {{else}}
+                                <div class="overflow-hidden">
+                                    <a href="{{$image.Link}}">
+                                        <amp-img layout="responsive" width="298" height="300"
+                                            class="transition duration-500 ease-in-out transform hover:scale-105 "
+                                            src="{{$image.ImageURL}}"></amp-img>
+                                    </a>
+                                </div>
+                            {{end}}
+                            {{end}}
                                 </div>
                             </div>
                         </div>

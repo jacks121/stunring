@@ -3,7 +3,6 @@ package routers
 import (
 	"net/http"
 	"swetelove/controller"
-	"swetelove/database"
 	"swetelove/repositories"
 	"swetelove/utils"
 
@@ -51,11 +50,7 @@ func SetupRouter() *gin.Engine {
 		path := c.Request.URL.Path
 
 		// 获取所有的分类信息
-		categoryRepo := &repositories.CategoryRepository{
-			DB:    database.MysqlDB,
-			Redis: database.RedisClient,
-			Ctx:   database.GetContext(),
-		}
+		categoryRepo := repositories.NewCategoryRepository()
 		categories, err := categoryRepo.GetAllCategories()
 		if err != nil {
 			// 处理错误

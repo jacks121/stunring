@@ -1,24 +1,22 @@
 package service
 
 import (
-	"context"
 	"swetelove/models"
 	"swetelove/repositories"
-
-	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 )
 
 type AdvertisementService struct {
-	AdvertisementRepository *repositories.AdvertisementRepository
+	AdvertisementRepository *repositories.AdvertisementRepository // 广告仓库
 }
 
-func NewAdvertisementService(db *gorm.DB, redis *redis.Client, ctx context.Context) *AdvertisementService {
+// NewAdvertisementService 创建 AdvertisementService 实例
+func NewAdvertisementService() *AdvertisementService {
 	return &AdvertisementService{
-		AdvertisementRepository: repositories.NewAdvertisementRepository(db, redis, ctx),
+		AdvertisementRepository: repositories.NewAdvertisementRepository(), // 初始化广告仓库
 	}
 }
 
+// GetAdvertisementByCode 根据广告代码获取广告
 func (s *AdvertisementService) GetAdvertisementByCode(code string) (*models.Advertisement, error) {
 	return s.AdvertisementRepository.GetAdvertisementByCode(code)
 }

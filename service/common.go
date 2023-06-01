@@ -1,53 +1,52 @@
 package service
 
 import (
-	"context"
-	"fmt"
 	"swetelove/models"
 	"swetelove/repositories"
-
-	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 )
 
+// HeaderInfo 包含头部信息
 type HeaderInfo struct {
-	CategoryTree []*models.Category
-	Currencies   []*models.Currency // Added currencies field
-	// Other fields here...
+	CategoryTree []*models.Category // 类别树
+	Currencies   []*models.Currency // 货币列表
+	// 其他字段...
 }
 
+// CommonService 提供通用服务
 type CommonService struct {
-	CategoryRepository *repositories.CategoryRepository
-	CurrencyRepository *repositories.CurrencyRepository // Added currency repository
-	// Other repositories here...
+	CategoryRepository *repositories.CategoryRepository // 类别仓库
+	CurrencyRepository *repositories.CurrencyRepository // 货币仓库
+	// 其他仓库...
 }
 
-func NewCommonService(db *gorm.DB, redis *redis.Client, ctx context.Context) *CommonService {
+// NewCommonService 创建CommonService实例
+func NewCommonService() *CommonService {
 	return &CommonService{
-		CategoryRepository: repositories.NewCategoryRepository(db, redis, ctx),
-		CurrencyRepository: repositories.NewCurrencyRepository(db, redis, ctx), // Initialize currency repository
-		// Initialize other repositories here...
+		CategoryRepository: repositories.NewCategoryRepository(), // 初始化类别仓库
+		CurrencyRepository: repositories.NewCurrencyRepository(), // 初始化货币仓库
+		// 初始化其他仓库...
 	}
 }
 
+// GetHeaderInfo 获取头部信息
 func (s *CommonService) GetHeaderInfo() (*HeaderInfo, error) {
 	info := &HeaderInfo{}
 
-	// Get category tree
+	// 获取类别树
 	categoryTree, err := s.CategoryRepository.GetCategoryTree()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get category tree: %w", err)
+		return nil, err
 	}
 	info.CategoryTree = categoryTree
 
-	// Get currencies
+	// 获取货币列表
 	currencies, err := s.CurrencyRepository.GetAllCurrencies()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get currencies: %w", err)
+		return nil, err
 	}
 	info.Currencies = currencies
 
-	// Get other info...
+	// 获取其他信息...
 	// ...
 
 	return info, nil
