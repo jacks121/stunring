@@ -94,5 +94,5 @@ type Collection struct {
 	gorm.Model
 	Name string
 	Type int
-	Rule json.RawMessage
+	Rule json.RawMessage `gorm:"type:json"`
 }
