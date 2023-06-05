@@ -1,11 +1,14 @@
 package repositories
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"math/rand"
 	"strconv"
+	"swetelove/database"
 	"swetelove/models"
+	"sync"
 	"time"
 
 	"github.com/olivere/elastic/v7"
@@ -18,11 +21,28 @@ type ProductRepository struct {
 	ES *elastic.Client
 }
 
-func NewProductRepository(es *elastic.Client) *ProductRepository {
+func NewProductRepository() *ProductRepository {
 	return &ProductRepository{
 		BaseRepository: *NewBaseRepository(),
-		ES:             es,
+		ES:             database.ElasticClient,
 	}
+}
+
+func (r *ProductRepository) GetAllProducts() ([]models.Product, error) {
+	var products []models.Product
+
+	if err := r.DB.Preload(clause.Associations).
+		Preload("ProductAttributes.Value").
+		Preload("ProductAttributes.Images").
+		Preload("Reviews", func(db *gorm.DB) *gorm.DB {
+			return db.Order("rating DESC").Limit(5)
+		}).
+		Preload("Reviews.Images").
+		Find(&products).Error; err != nil {
+		return nil, fmt.Errorf("failed to get products from DB: %w", err)
+	}
+
+	return products, nil
 }
 
 func (r *ProductRepository) GetProductByID(id uint) (*models.Product, error) {
@@ -88,4 +108,83 @@ func (r *ProductRepository) GetProductByID(id uint) (*models.Product, error) {
 	}
 
 	return &product, nil
+}
+
+func (r *ProductRepository) GetLatestProducts(size int) ([]models.Product, error) {
+	// 创建 Elasticsearch 搜索请求
+	searchRequest := r.ES.Search().Index("products")
+
+	// 设置排序方式，按照 `CreatedAt` 字段降序排列
+	searchRequest.Sort("CreatedAt", false)
+
+	// 设置查询结果数量
+	searchRequest.Size(size)
+
+	// 发送搜索请求
+	searchResult, err := searchRequest.Do(database.GetContext())
+	if err != nil || len(searchResult.Hits.Hits) == 0 {
+		// If Elasticsearch request fails or there are no results, fallback to DB
+		return r.GetLatestProductsFromDB(size)
+	}
+
+	// 解析搜索结果
+	var products []models.Product
+	for _, hit := range searchResult.Hits.Hits {
+		var product models.Product
+		err := json.Unmarshal(hit.Source, &product)
+		if err != nil {
+			// If unmarshalling fails, fallback to DB
+			return r.GetLatestProductsFromDB(size)
+		}
+		products = append(products, product)
+	}
+
+	return products, nil
+}
+
+func (r *ProductRepository) GetLatestProductsFromDB(size int) ([]models.Product, error) {
+	var products []models.Product
+
+	if err := r.DB.Preload(clause.Associations).
+		Preload("ProductAttributes.Value").
+		Preload("ProductAttributes.Images").
+		Preload("Reviews", func(db *gorm.DB) *gorm.DB {
+			return db.Order("rating DESC").Limit(5)
+		}).
+		Preload("Reviews.Images").
+		Order("CreatedAt DESC").Limit(size).
+		Find(&products).Error; err != nil {
+		return nil, fmt.Errorf("failed to get products from DB: %w", err)
+	}
+
+	return products, nil
+}
+
+func (r *ProductRepository) SyncProductsToES() error {
+	// 从数据库获取所有商品
+	products, err := r.GetAllProducts()
+	if err != nil {
+		return fmt.Errorf("error getting products from DB: %v", err)
+	}
+
+	var wg sync.WaitGroup
+	for _, product := range products {
+		wg.Add(1)
+		go func(p models.Product) {
+			defer wg.Done()
+
+			_, err := r.ES.Index().
+				Index("products").
+				Id(fmt.Sprint(p.ID)).
+				BodyJson(p).
+				Do(context.Background())
+			if err != nil {
+				// 错误处理，例如记录日志或者将错误发送到错误追踪系统
+				fmt.Printf("error indexing product %v: %v", p.ID, err)
+			}
+		}(product)
+	}
+	wg.Wait()
+
+	return nil
 }

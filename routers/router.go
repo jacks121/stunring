@@ -45,6 +45,9 @@ func SetupRouter() *gin.Engine {
 
 	router.GET("/index", controller.Index)
 	router.GET("/", controller.Index)
+	router.GET("/cache/flush", controller.FlushCache)
+	router.GET("/latest-products/:size", controller.GetLatestProducts)
+	router.GET("/products/:id", controller.GetProductByID)
 
 	router.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
