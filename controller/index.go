@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"swetelove/service"
 
@@ -8,12 +11,14 @@ import (
 )
 
 type IndexController struct {
-	AdService *service.AdvertisementService
+	AdService         *service.AdvertisementService
+	CollectionService *service.CollectionService
 }
 
 func NewIndexController() *IndexController {
 	return &IndexController{
-		AdService: service.NewAdvertisementService(),
+		AdService:         service.NewAdvertisementService(),
+		CollectionService: service.NewCollectionService(),
 	}
 }
 
@@ -29,9 +34,28 @@ func (ic *IndexController) Index(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	newin, err := ic.CollectionService.GetProductsByCollectionCode("newin")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	sales, err := ic.CollectionService.GetProductsByCollectionCode("top")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	jsonNewin, err := json.MarshalIndent(sales, "", "  ")
+	if err != nil {
+		log.Println("Error marshaling newin to JSON:", err)
+	} else {
+		fmt.Println(string(jsonNewin))
+	}
 
 	Render(c, prefix+"index.tmpl", gin.H{
 		"BannerAd":          bannerAd,
 		"IndexCategoriesAd": indexCategoriesAd,
+		"Newin":             newin,
+		"Sales":             sales,
 	})
 }

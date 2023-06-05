@@ -46,7 +46,7 @@ func (cpc *CacheProductController) GetLatestProducts(c *gin.Context) {
 		return
 	}
 
-	products, err := cpc.ProductService.GetLatestProducts(size)
+	products, err := cpc.ProductService.GetLatestProducts(size, "created_at")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

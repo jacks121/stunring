@@ -14,6 +14,7 @@ type Product struct {
 	OnSale            bool
 	Description       string `gorm:"type:text"`
 	VideoURL          string `gorm:"type:varchar(255)"`
+	Sales             uint
 	ProductAttributes []ProductAttribute
 	Categories        []Category `gorm:"many2many:product_categories;"`
 	Images            []Image    `gorm:"polymorphic:Imageable;"`
@@ -92,7 +93,8 @@ type Advertisement struct {
 
 type Collection struct {
 	gorm.Model
-	Name string
-	Type int
+	Name string          `gorm:"type:varchar(255)"`
+	Type string          `gorm:"type:varchar(255)"`
+	Code string          `gorm:"type:varchar(255)"`
 	Rule json.RawMessage `gorm:"type:json"`
 }

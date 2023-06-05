@@ -110,12 +110,20 @@ func (r *ProductRepository) GetProductByID(id uint) (*models.Product, error) {
 	return &product, nil
 }
 
-func (r *ProductRepository) GetLatestProducts(size int) ([]models.Product, error) {
+func (r *ProductRepository) GetLatestProducts(size int, sortBy string) ([]models.Product, error) {
 	// 创建 Elasticsearch 搜索请求
+	return r.GetLatestProductsFromDB(size, sortBy)
 	searchRequest := r.ES.Search().Index("products")
 
-	// 设置排序方式，按照 `CreatedAt` 字段降序排列
-	searchRequest.Sort("CreatedAt", false)
+	// 根据 sortBy 参数设置排序字段和顺序
+	switch sortBy {
+	case "created_at":
+		searchRequest.Sort("CreatedAt", false) // 根据 created_at 字段降序排列
+	case "sales":
+		searchRequest.Sort("Sales", false) // 根据 sales 字段降序排列
+	default:
+		return nil, fmt.Errorf("invalid sortBy parameter: %s", sortBy)
+	}
 
 	// 设置查询结果数量
 	searchRequest.Size(size)
@@ -124,7 +132,7 @@ func (r *ProductRepository) GetLatestProducts(size int) ([]models.Product, error
 	searchResult, err := searchRequest.Do(database.GetContext())
 	if err != nil || len(searchResult.Hits.Hits) == 0 {
 		// If Elasticsearch request fails or there are no results, fallback to DB
-		return r.GetLatestProductsFromDB(size)
+		return r.GetLatestProductsFromDB(size, sortBy)
 	}
 
 	// 解析搜索结果
@@ -134,7 +142,7 @@ func (r *ProductRepository) GetLatestProducts(size int) ([]models.Product, error
 		err := json.Unmarshal(hit.Source, &product)
 		if err != nil {
 			// If unmarshalling fails, fallback to DB
-			return r.GetLatestProductsFromDB(size)
+			return r.GetLatestProductsFromDB(size, sortBy)
 		}
 		products = append(products, product)
 	}
@@ -142,8 +150,18 @@ func (r *ProductRepository) GetLatestProducts(size int) ([]models.Product, error
 	return products, nil
 }
 
-func (r *ProductRepository) GetLatestProductsFromDB(size int) ([]models.Product, error) {
+func (r *ProductRepository) GetLatestProductsFromDB(size int, sortBy string) ([]models.Product, error) {
 	var products []models.Product
+
+	var order string
+	switch sortBy {
+	case "created_at":
+		order = "created_at DESC" // 根据 created_at 字段降序排列
+	case "sales":
+		order = "sales DESC" // 根据 sales 字段降序排列
+	default:
+		return nil, fmt.Errorf("invalid sortBy parameter: %s", sortBy)
+	}
 
 	if err := r.DB.Preload(clause.Associations).
 		Preload("ProductAttributes.Value").
@@ -152,7 +170,7 @@ func (r *ProductRepository) GetLatestProductsFromDB(size int) ([]models.Product,
 			return db.Order("rating DESC").Limit(5)
 		}).
 		Preload("Reviews.Images").
-		Order("CreatedAt DESC").Limit(size).
+		Order(order).Limit(size).
 		Find(&products).Error; err != nil {
 		return nil, fmt.Errorf("failed to get products from DB: %w", err)
 	}
@@ -161,6 +179,12 @@ func (r *ProductRepository) GetLatestProductsFromDB(size int) ([]models.Product,
 }
 
 func (r *ProductRepository) SyncProductsToES() error {
+	// 删除目标索引
+	_, err := r.ES.DeleteIndex("products").Do(context.Background())
+	if err != nil {
+		return fmt.Errorf("error deleting index: %v", err)
+	}
+
 	// 从数据库获取所有商品
 	products, err := r.GetAllProducts()
 	if err != nil {
