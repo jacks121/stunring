@@ -1,4 +1,3 @@
-// controller/index.go
 package controller
 
 import (
@@ -8,18 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Index(c *gin.Context) {
+type IndexController struct {
+	AdService *service.AdvertisementService
+}
+
+func NewIndexController() *IndexController {
+	return &IndexController{
+		AdService: service.NewAdvertisementService(),
+	}
+}
+
+func (ic *IndexController) Index(c *gin.Context) {
 	prefix := c.MustGet("template_prefix").(string)
-	adService := service.NewAdvertisementService()
-	bannerAd, err := adService.GetAdvertisementByCode("banner")
+	bannerAd, err := ic.AdService.GetAdvertisementByCode("banner")
 	if err != nil {
-		// Handle error
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	indexCategoriesAd, err := adService.GetAdvertisementByCode("category_banner")
+	indexCategoriesAd, err := ic.AdService.GetAdvertisementByCode("category_banner")
 	if err != nil {
-		// Handle error
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

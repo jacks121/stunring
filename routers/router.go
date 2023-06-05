@@ -2,6 +2,7 @@ package routers
 
 import (
 	"net/http"
+	"strconv"
 	"swetelove/controller"
 	"swetelove/repositories"
 	"swetelove/utils"
@@ -39,15 +40,17 @@ func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.UseRawPath = true
 	router.Use(ChangeTemplateBasedOnDevice())
-
 	router.LoadHTMLGlob(TemplatesPath)
 	router.Static(StaticURL, StaticPath)
 
-	router.GET("/index", controller.Index)
-	router.GET("/", controller.Index)
-	router.GET("/cache/flush", controller.FlushCache)
-	router.GET("/latest-products/:size", controller.GetLatestProducts)
-	router.GET("/products/:id", controller.GetProductByID)
+	indexController := controller.NewIndexController()
+	cacheController := controller.NewCacheController()
+	cacheProductController := controller.NewCacheProductController()
+	router.GET("/index", indexController.Index)
+	router.GET("/", indexController.Index)
+	router.GET("/cache/flush", cacheController.FlushCache)
+	router.GET("/latest-products/:size", cacheProductController.GetLatestProducts)
+	router.GET("/products/:id", cacheProductController.GetProductByID)
 
 	router.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
@@ -69,11 +72,17 @@ func SetupRouter() *gin.Engine {
 				break
 			}
 		}
-		// 如果找到匹配的分类 URL，则调用 categoryShow 处理函数并传递分类 ID
+
+		categoryController := controller.NewCategoryController()
+		// 如果找到匹配的分类 URL，则调用 categoryController 的 Show 方法并传递分类 ID
 		if categoryID != 0 {
-			controller.CategoryShow(c, categoryID)
+			c.Params = append(c.Params, gin.Param{Key: "id", Value: strconv.FormatUint(uint64(categoryID), 10)})
+			categoryController.Show(c)
 			return
 		}
+
+		// 处理其他逻辑，例如返回 404 Not Found
+		c.JSON(http.StatusNotFound, gin.H{"error": "Page not found"})
 	})
 
 	return router
