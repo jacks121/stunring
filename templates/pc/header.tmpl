@@ -1,4 +1,4 @@
-{{ define "pc/header.tmpl" }}
+{!! define "pc/header.tmpl" !!}
 <header class="page-header border-b border-gray-300">
     <div class="header-promo">
         <div id="promo-accordion" class="promo-accordion text-white bg-black text-center" data-mage-init='{
@@ -181,27 +181,27 @@
                             <li class="level0 nav-3 category-item level-top"><a
                                     href="https://www.stunring.com/what-s-new.html" class="level-top"><span>What's
                                         New</span></a></li>
-                            {{ range $index, $category := .HeaderInfo.CategoryTree }}
+                            {!! range $index, $category := .HeaderInfo.CategoryTree !!}
                             <li
-                                class="level0 nav-{{ $category.ID }} category-item level-top{{ if eq $category.ParentID 0 }} parent{{ end }}">
+                                class="level0 nav-{!! $category.ID !!} category-item level-top{!! if eq $category.ParentID 0 !!} parent{!! end !!}">
                                 <!-- 类别链接 -->
-                                <a href="{{ $category.URL }}" class="level-top">
-                                    <span>{{ $category.CategoryName }}</span>
+                                <a href="{!! $category.URL !!}" class="level-top">
+                                    <span>{!! $category.CategoryName !!}</span>
                                 </a>
                                 <!-- 子类别 -->
-                                {{ if $category.Subcategories }}
+                                {!! if $category.Subcategories !!}
                                 <ul class="level0 submenu">
-                                    {{ range $subcategory := $category.Subcategories }}
+                                    {!! range $subcategory := $category.Subcategories !!}
                                     <li
-                                        class="level1 nav-{{ $subcategory.ID }} category-item{{ if eq $index 0 }} first{{ end }}">
-                                        <a href="{{ $subcategory.URL }}"><span>{{ $subcategory.CategoryName
-                                                }}</span></a>
+                                        class="level1 nav-{!! $subcategory.ID !!} category-item{!! if eq $index 0 !!} first{!! end !!}">
+                                        <a href="{!! $subcategory.URL !!}"><span>{!! $subcategory.CategoryName
+                                                !!}</span></a>
                                     </li>
-                                    {{ end }}
+                                    {!! end !!}
                                 </ul>
-                                {{ end }}
+                                {!! end !!}
                             </li>
-                            {{ end }}
+                            {!! end !!}
                         </ul>
                     </nav>
                 </div>
@@ -216,4 +216,4 @@
         </div>
     </div>
 </header>
-{{ end }}
+{!! end !!}
