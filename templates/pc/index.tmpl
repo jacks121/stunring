@@ -346,7 +346,7 @@
                         </div>
                         <div class="carousel-list product-list-slider block-content">
                             <div class="carousel-list-control swiper w-full"
-                                data-mage-init='{"Swipe":{"slidesPerView":"5","spaceBetween":5,"watchSlidesProgress" : true,"watchSlidesVisibility" : true!!}'>
+                                data-mage-init='{"Swipe":{"slidesPerView":"5","spaceBetween":5,"watchSlidesProgress" : true,"watchSlidesVisibility" : true}}'>
                                 <div class="swiper-wrapper">
                                     {!!range .Newin!!}
                                     <div class="swiper-slide item relative">
@@ -565,7 +565,7 @@
         #MYSTUNRING or <a on="tap:review-gallery-form" class="lightbox-open">upload here</a> for a
         chance to win $500 and get featured in <a href="#">MYSTUNRING Gallery</a>.</p>
 
-    <amp-state id="galleryState" src="http://127.0.0.1:8080/review/gallery/"></amp-state>
+    <amp-state id="galleryState" src="//192.168.183.209:8080/review/gallery/"></amp-state>
     <amp-state id="gallery">
         <script type="application/json">
             {
@@ -576,7 +576,7 @@
     </amp-state>
 
     <div class="gallery-list scale mt-6 border-t border-gray-200 pt-3">
-        <amp-list id="alleryList" src="http://127.0.0.1:8080/review/gallery/" [src]="galleryState.items" width="auto" height="484"
+        <amp-list id="alleryList" src="//192.168.183.209:8080/review/gallery/" [src]="galleryState.items" width="auto" height="484"
                   layout="fixed-height" >
             <template type="amp-mustache" >
                 <div class="gallery-image inline-grid">
@@ -589,7 +589,7 @@
             </template>
         </amp-list>
     </div>
-    <form method="GET" action-xhr="http://127.0.0.1:8080/review/gallery/"
+    <form method="GET" action-xhr="//192.168.183.209:8080/review/gallery/"
           target="_top"
           on="submit:media_loading.show;submit-success: AMP.setState({
             galleryState: {
@@ -743,7 +743,7 @@
                                                         <input name="email" type="email" id="newsletter"
                                                             placeholder="Enter&#x20;your&#x20;email&#x20;address"
                                                             class="leading-10 border border-gray-200 border-r-0 outline-none box-border"
-                                                            data-mage-init='{"mage/trim-input":{{}}'
+                                                            data-mage-init='{"mage/trim-input":{}}'
                                                             data-validate="{required:true, 'validate-email':true}" />
                                                     </label>
                                                 </div>
