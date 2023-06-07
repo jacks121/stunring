@@ -16,6 +16,7 @@ func NewCategoryController() *CategoryController {
 }
 
 func (cc *CategoryController) Show(c *gin.Context) {
+	prefix := c.MustGet("template_prefix").(string)
 	categoryIDStr := c.Param("id")
 	categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
 	if err != nil {
@@ -23,10 +24,7 @@ func (cc *CategoryController) Show(c *gin.Context) {
 		return
 	}
 
-	// 根据 categoryID 执行相应的逻辑，例如查询分类信息，展示分类页面等
-	// ...
-
-	c.JSON(http.StatusOK, gin.H{
-		"categoryID": categoryID,
+	Render(c, prefix+"category.tmpl", gin.H{
+		"CategoryID": categoryID,
 	})
 }
