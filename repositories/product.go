@@ -34,6 +34,7 @@ func (r *ProductRepository) GetAllProducts() ([]models.Product, error) {
 	if err := r.DB.Preload(clause.Associations).
 		Preload("ProductAttributes.Value").
 		Preload("ProductAttributes.Images").
+		Preload("Categories").
 		Preload("Reviews", func(db *gorm.DB) *gorm.DB {
 			return db.Order("rating DESC").Limit(5)
 		}).
@@ -112,7 +113,6 @@ func (r *ProductRepository) GetProductByID(id uint) (*models.Product, error) {
 
 func (r *ProductRepository) GetLatestProducts(size int, sortBy string) ([]models.Product, error) {
 	// 创建 Elasticsearch 搜索请求
-	return r.GetLatestProductsFromDB(size, sortBy)
 	searchRequest := r.ES.Search().Index("products")
 
 	// 根据 sortBy 参数设置排序字段和顺序

@@ -8,13 +8,15 @@ import (
 )
 
 type CategoryController struct {
-	// 可以添加 CategoryService 或其他依赖的服务
+	// Add CategoryService or other required services here
 }
 
+// NewCategoryController creates a new instance of CategoryController.
 func NewCategoryController() *CategoryController {
 	return &CategoryController{}
 }
 
+// Show handles the request to show a category.
 func (cc *CategoryController) Show(c *gin.Context) {
 	prefix := c.MustGet("template_prefix").(string)
 	categoryIDStr := c.Param("id")

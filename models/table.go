@@ -59,7 +59,7 @@ type Image struct {
 	ImageURL      string `gorm:"type:varchar(255)"`
 	Link          string
 	ImageableID   uint
-	ImageableType string
+	ImageableType string `gorm:"polymorphic:Imageable;"`
 }
 
 type Category struct {

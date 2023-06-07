@@ -13,12 +13,14 @@ type CacheController struct {
 	CacheService *service.CacheService
 }
 
+// NewCacheController creates a new instance of CacheController.
 func NewCacheController() *CacheController {
 	return &CacheController{
 		CacheService: service.NewCacheService(),
 	}
 }
 
+// FlushCache handles the request to flush the cache.
 func (cc *CacheController) FlushCache(c *gin.Context) {
 	err := cc.CacheService.SyncProductsToES()
 	if err != nil {
@@ -32,12 +34,14 @@ type CacheProductController struct {
 	ProductService *repositories.ProductRepository
 }
 
+// NewCacheProductController creates a new instance of CacheProductController.
 func NewCacheProductController() *CacheProductController {
 	return &CacheProductController{
 		ProductService: repositories.NewProductRepository(),
 	}
 }
 
+// GetLatestProducts handles the request to retrieve the latest products.
 func (cpc *CacheProductController) GetLatestProducts(c *gin.Context) {
 	sizeParam := c.Param("size")
 	size, err := strconv.Atoi(sizeParam)
@@ -55,6 +59,7 @@ func (cpc *CacheProductController) GetLatestProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"products": products})
 }
 
+// GetProductByID handles the request to retrieve a product by ID.
 func (cpc *CacheProductController) GetProductByID(c *gin.Context) {
 	productIDStr := c.Param("id")
 	productID, err := strconv.ParseUint(productIDStr, 10, 64)

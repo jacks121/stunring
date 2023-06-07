@@ -2,8 +2,6 @@ package repositories
 
 import (
 	"swetelove/models"
-
-	"gorm.io/gorm"
 )
 
 type ReviewRepository struct {
@@ -16,21 +14,33 @@ func NewReviewRepository() *ReviewRepository {
 	}
 }
 
-func (r *ReviewRepository) GetReviewsWithImagesByCreatedAtDescending(limit int) ([]*models.Review, error) {
+// GetReviewsWithImagesByPageAndCount retrieves reviews with images based on the page number and page size,
+// and returns the total count of reviews.
+func (r *ReviewRepository) GetReviewsWithImagesByPageAndCount(page, pageSize int) ([]*models.Review, int, error) {
 	var reviews []*models.Review
+	var total int64
 
-	err := r.DB.
+	offset := (page - 1) * pageSize
+
+	// Subquery to retrieve imageable_ids of reviews with images
+	subQuery := r.DB.Model(&models.Image{}).
+		Select("imageable_id").
+		Where("imageable_type = ?", "reviews").
+		Distinct()
+
+	err := r.DB.Model(&models.Review{}).
+		Joins("JOIN (?) AS sub ON sub.imageable_id = reviews.id", subQuery).
+		Count(&total).
 		Order("created_at desc").
-		Limit(limit).
-		Preload("Images", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id")
-		}).
+		Offset(offset).
+		Limit(pageSize).
+		Preload("Images").
 		Find(&reviews).
 		Error
 
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return reviews, nil
+	return reviews, int(total), nil
 }

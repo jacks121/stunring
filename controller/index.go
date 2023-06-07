@@ -20,38 +20,38 @@ func NewIndexController() *IndexController {
 }
 
 func (ic *IndexController) Index(c *gin.Context) {
-	// 从上下文中获取模板前缀
+	// Get the template prefix from the context
 	prefix := c.MustGet("template_prefix").(string)
 
-	// 获取顶部广告
+	// Get the top banner advertisement
 	bannerAd, err := ic.AdService.GetAdvertisementByCode("banner")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// 获取分类横幅广告
+	// Get the category banner advertisement
 	indexCategoriesAd, err := ic.AdService.GetAdvertisementByCode("category_banner")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// 获取"新上市"产品集合
+	// Get the "New In" product collection
 	newin, err := ic.CollectionService.GetProductsByCollectionCode("newin")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// 获取热销产品集合
+	// Get the top-selling product collection
 	sales, err := ic.CollectionService.GetProductsByCollectionCode("top")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// 渲染模板，并传递数据给模板
+	// Render the template and pass data to the template
 	Render(c, prefix+"index.tmpl", gin.H{
 		"BannerAd":          bannerAd,
 		"IndexCategoriesAd": indexCategoriesAd,
