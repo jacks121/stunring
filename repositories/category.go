@@ -132,3 +132,53 @@ func (r *CategoryRepository) GetCategoriesByIds(ids []int) ([]*models.Category, 
 
 	return categories, nil
 }
+
+type Breadcrumb struct {
+	Name string
+	URL  string
+}
+
+func (r *CategoryRepository) GetBreadcrumbs(categoryID int) ([]Breadcrumb, error) {
+	var breadcrumbs []Breadcrumb
+	category, err := r.GetCategoryByID(categoryID)
+	if err != nil {
+		return nil, err
+	}
+
+	breadcrumbs = append(breadcrumbs, Breadcrumb{Name: category.CategoryName, URL: category.URL})
+
+	// Recursively get parent categories
+	for category.ParentID != 0 {
+		category, err = r.GetCategoryByID(category.ParentID)
+		if err != nil {
+			return nil, err
+		}
+		breadcrumbs = append([]Breadcrumb{{Name: category.CategoryName, URL: category.URL}}, breadcrumbs...)
+	}
+
+	return breadcrumbs, nil
+}
+
+func (r *CategoryRepository) GetCategoryByID(categoryID int) (*models.Category, error) {
+	var category models.Category
+	redisKey := fmt.Sprintf("category:%d", categoryID)
+
+	// Try to fetch the category from Redis
+	if err := r.FetchFromRedis(redisKey, &category); err != nil {
+		// If the category is not in Redis, fetch it from the database
+		if err := r.FetchCategoryFromDB(categoryID, &category); err != nil {
+			return nil, err
+		}
+		// Store the fetched category in Redis
+		if err := r.StoreInRedis(redisKey, &category); err != nil {
+			return nil, err
+		}
+	}
+
+	return &category, nil
+}
+
+func (r *CategoryRepository) FetchCategoryFromDB(categoryID int, category *models.Category) error {
+	// Here, we can add specific query logic, such as preloading Images
+	return r.DB.Preload("Images").First(category, categoryID).Error
+}

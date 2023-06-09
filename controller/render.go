@@ -18,5 +18,6 @@ func Render(c *gin.Context, templateName string, data gin.H) {
 	}
 
 	data["HeaderInfo"] = headerInfo
+	data["BaseUrl"] = "//127.0.0.1:8080"
 	c.HTML(http.StatusOK, templateName, data)
 }
