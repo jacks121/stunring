@@ -41,6 +41,7 @@ type ProductAttribute struct {
 	AttributeID     uint
 	ValueID         uint
 	Value           AttributeValue
+	Attribute       Attribute
 	PriceAdjustment float64 `gorm:"type:decimal(10,2)"`
 	Images          []Image `gorm:"polymorphic:Imageable;"`
 }

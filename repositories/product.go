@@ -34,6 +34,7 @@ func (r *ProductRepository) GetAllProducts() ([]models.Product, error) {
 	if err := r.DB.Preload(clause.Associations).
 		Preload("ProductAttributes.Value").
 		Preload("ProductAttributes.Images").
+		Preload("ProductAttributes.Attribute").
 		Preload("Categories").
 		Preload("Reviews", func(db *gorm.DB) *gorm.DB {
 			return db.Order("rating DESC").Limit(5)
@@ -178,6 +179,93 @@ func (r *ProductRepository) GetLatestProductsFromDB(size int, sortBy string) ([]
 	return products, nil
 }
 
+type PagedProducts struct {
+	Products []models.Product `json:"products"`
+	Page     int              `json:"page"`
+	Pages    int              `json:"pages"`
+	Size     int              `json:"size"`
+}
+
+type Filter struct {
+	MinPrice   float64 `json:"min_price"`
+	MaxPrice   float64 `json:"max_price"`
+	Color      string  `json:"color"`
+	CaratRange string  `json:"carat_range"`
+	StoneCut   string  `json:"stone_cut"`
+	PageSize   int     `json:"page_size"`
+}
+
+func (r *ProductRepository) GetProductsByCategoryID(categoryID int, page int, size int, filter Filter) (PagedProducts, error) {
+	ctx := context.Background()
+
+	// 构建查询条件，匹配指定的Categories ID
+	boolQuery := elastic.NewBoolQuery()
+	boolQuery.Must(elastic.NewTermQuery("Categories.ID", categoryID))
+
+	// 添加价格筛选条件
+	if filter.MinPrice != 0 || filter.MaxPrice != 0 {
+		priceRangeQuery := elastic.NewRangeQuery("price")
+		if filter.MinPrice != 0 {
+			priceRangeQuery.Gte(filter.MinPrice)
+		}
+		if filter.MaxPrice != 0 {
+			priceRangeQuery.Lte(filter.MaxPrice)
+		}
+		boolQuery.Filter(priceRangeQuery)
+	}
+
+	if filter.CaratRange != "" {
+		boolQuery.Filter(elastic.NewTermQuery("carat_range", filter.CaratRange))
+	}
+
+	// 添加颜色筛选条件
+	if filter.Color != "" {
+		boolQuery.Filter(elastic.NewTermQuery("color", filter.Color))
+	}
+
+	// 计算从哪个位置开始返回结果
+	from := (page - 1) * size
+
+	// 构建搜索请求
+	searchResult, err := r.ES.Search().
+		Index("products"). // 设置索引名称为 "products"
+		Query(boolQuery).  // 设置查询条件
+		From(from).        // 设置从哪个位置开始返回结果
+		Size(size).        // 设置返回的最大文档数量
+		Do(ctx)            // 执行搜索
+
+	if err != nil {
+		// 处理搜索错误
+		return PagedProducts{}, err
+	}
+
+	// 计算总页数
+	total := int(searchResult.Hits.TotalHits.Value)
+	pages := total / size
+	if total%size > 0 {
+		pages++
+	}
+
+	// 解析搜索结果
+	var products []models.Product
+	for _, hit := range searchResult.Hits.Hits {
+		var product models.Product
+		err := json.Unmarshal(hit.Source, &product)
+		if err != nil {
+			// 处理解析错误
+			return PagedProducts{}, err
+		}
+		products = append(products, product)
+	}
+
+	return PagedProducts{
+		Products: products,
+		Page:     page,
+		Pages:    pages,
+		Size:     size,
+	}, nil
+}
+
 func (r *ProductRepository) SyncProductsToES() error {
 	// 删除目标索引
 	_, err := r.ES.DeleteIndex("products").Do(context.Background())
@@ -187,6 +275,7 @@ func (r *ProductRepository) SyncProductsToES() error {
 
 	// 从数据库获取所有商品
 	products, err := r.GetAllProducts()
+
 	if err != nil {
 		return fmt.Errorf("error getting products from DB: %v", err)
 	}

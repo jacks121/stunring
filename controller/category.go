@@ -3,20 +3,23 @@ package controller
 import (
 	"net/http"
 	"strconv"
+	"swetelove/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 type CategoryController struct {
-	// Add CategoryService or other required services here
+	productService *service.ProductService
 }
 
-// NewCategoryController creates a new instance of CategoryController.
+// NewCategoryController 创建 CategoryController 实例
 func NewCategoryController() *CategoryController {
-	return &CategoryController{}
+	return &CategoryController{
+		productService: service.NewProductService(),
+	}
 }
 
-// Show handles the request to show a category.
+// Show 处理显示分类的请求
 func (cc *CategoryController) Show(c *gin.Context) {
 	prefix := c.MustGet("template_prefix").(string)
 	categoryIDStr := c.Param("id")
@@ -26,7 +29,15 @@ func (cc *CategoryController) Show(c *gin.Context) {
 		return
 	}
 
+	products, err := cc.productService.GetProductsByCategoryID(int(categoryID))
+	if err != nil {
+		// 处理错误
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
+		return
+	}
+
 	Render(c, prefix+"category.tmpl", gin.H{
 		"CategoryID": categoryID,
+		"Products":   products,
 	})
 }
