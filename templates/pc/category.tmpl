@@ -458,16 +458,7 @@
         }
     }
 </script>
-                    <script type="text/x-magento-init">
-    {
-        "body": {
-            "pageCache": {"url":"https:\/\/www.stunring.com\/page_cache\/block\/render\/id\/21\/","handles":["default","catalog_category_view","catalog_category_view_type_layered","catalog_category_view_id_21"],"originalRequest":{"route":"catalog","controller":"category","action":"view","uri":"\/wedding.html"},"versionCookieName":"private_content_version"}        }
-    }
-</script>
-
-                    <div class="toolbar toolbar-products flex justify-between items-center py-4 border-t border-b  border-gray-200"
-                        data-mage-init='{"productListToolbarForm":{"mode":"product_list_mode","direction":"product_list_dir","order":"product_list_order","limit":"product_list_limit","modeDefault":"grid","directionDefault":"asc","orderDefault":"position","limitDefault":"24","url":"https:\/\/www.stunring.com\/wedding.html","formKey":"vpCgrAYrTKF61RBC","post":false}}'>
-
+                    <div class="toolbar toolbar-products flex justify-between items-center py-4 border-t border-b  border-gray-200">
                         <div class="toolbar-sorter-container">
                             <div class="toolbar-sorter sorter font-sans text-sm">
                                 <span class="sorter-label">Sort By</span>
@@ -488,27 +479,70 @@
                                     <span>Show</span>
                                 </label>
                                 <div class="control">
-                                    <select id="limiter" data-role="limiter" class="limiter-options">
-                                        <option value="24" selected="selected">
+                                    <select id="page_size" class="limiter-options">
+                                        <option value="24" 
+                                        {!! if eq (printf "%d" .Size) "24" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             24 </option>
-                                        <option value="36">
+                                        <option value="36"
+                                        {!! if eq (printf "%d" .Size) "36" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             36 </option>
-                                        <option value="48">
+                                        <option value="48"
+                                        {!! if eq (printf "%d" .Size) "48" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             48 </option>
-                                        <option value="60">
+                                        <option value="60"
+                                        {!! if eq (printf "%d" .Size) "60" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             60 </option>
-                                        <option value="72">
+                                        <option value="72"
+                                        {!! if eq (printf "%d" .Size) "72" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             72 </option>
-                                        <option value="84">
+                                        <option value="84"
+                                        {!! if eq (printf "%d" .Size) "84" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             84 </option>
-                                        <option value="96">
-                                            96 </option>
+                                        <option value="6"
+                                        {!! if eq (printf "%d" .Size) "6" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
+                                            6 </option>
                                     </select>
                                 </div>
                                 <span class="limiter-text">per page</span>
                             </div>
-
-
+                            <script>
+                                require(['jquery'], function ($) {
+                                    $(document).ready(function () {
+                                        $('.limiter-options').on('change', function () {
+                                            var selectedValue = $(this).val();
+                                            var url = "{!! .Request.URL !!}";
+                                            url = url.replace(/(\?|\&)page_size=[0-9]+/, ""); // 移除原有的limit参数
+                                            if (url.indexOf("?") !== -1) {
+                                                url += "&page_size=" + selectedValue;
+                                            } else {
+                                                url += "?page_size=" + selectedValue;
+                                            }
+                                            window.location.href = url;
+                                        });
+                                    });
+                                });
+                            </script>
                             <div class="pages">
                                 <strong class="label pages-label" id="paging-label">Page</strong>
                                 <ul class="items pages-items" aria-labelledby="paging-label">
@@ -622,9 +656,7 @@
                         </ol>
                     </div>
 
-                    <div class="toolbar toolbar-products flex justify-between items-center py-4 border-t border-b  border-gray-200"
-                        data-mage-init='{"productListToolbarForm":{"mode":"product_list_mode","direction":"product_list_dir","order":"product_list_order","limit":"product_list_limit","modeDefault":"grid","directionDefault":"asc","orderDefault":"position","limitDefault":"24","url":"https:\/\/www.stunring.com\/wedding.html","formKey":"vpCgrAYrTKF61RBC","post":false}}'>
-
+                    <div class="toolbar toolbar-products flex justify-between items-center py-4 border-t border-b  border-gray-200">
                         <div class="toolbar-sorter-container">
                             <div class="toolbar-sorter sorter font-sans text-sm">
                                 <span class="sorter-label">Sort By</span>
@@ -645,21 +677,49 @@
                                     <span>Show</span>
                                 </label>
                                 <div class="control">
-                                    <select id="limiter" data-role="limiter" class="limiter-options">
-                                        <option value="24" selected="selected">
+                                    <select id="page_size" class="limiter-options">
+                                        <option value="24" 
+                                        {!! if eq (printf "%d" .Size) "24" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             24 </option>
-                                        <option value="36">
+                                        <option value="36"
+                                        {!! if eq (printf "%d" .Size) "36" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             36 </option>
-                                        <option value="48">
+                                        <option value="48"
+                                        {!! if eq (printf "%d" .Size) "48" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             48 </option>
-                                        <option value="60">
+                                        <option value="60"
+                                        {!! if eq (printf "%d" .Size) "60" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             60 </option>
-                                        <option value="72">
+                                        <option value="72"
+                                        {!! if eq (printf "%d" .Size) "72" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             72 </option>
-                                        <option value="84">
+                                        <option value="84"
+                                        {!! if eq (printf "%d" .Size) "84" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
                                             84 </option>
-                                        <option value="96">
-                                            96 </option>
+                                        <option value="6"
+                                        {!! if eq (printf "%d" .Size) "6" !!}
+                                            selected="selected"
+                                        {!! end !!}
+                                        >
+                                            6 </option>
                                     </select>
                                 </div>
                                 <span class="limiter-text">per page</span>
@@ -770,24 +830,38 @@
                             <strong data-role="title">Shop By</strong>
                         </div>
                         <div class="block-content filter-content">
-
-
-                            <strong role="heading" aria-level="2"
-                                class="block-subtitle filter-subtitle uppercase text-gray-700">Shopping Options</strong>
+                            <div class="filter-current">
+                                <strong class="block-subtitle filter-current-subtitle" role="heading" aria-level="2" data-count="1">Now Shopping
+                                    by</strong>
+                                <ol class="items">
+                                    <li class="item">  
+                                        <span class="filter-label">Stone Color</span>
+                                        <span class="filter-value">White</span>
+                                        <a class="action remove" href="https://www.stunring.com/wedding.html" title="Remove Stone Color White">
+                                            <span>Remove This Item</span>
+                                        </a>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="block-actions filter-actions">
+                                <a href="{!! .Request.Url !!}" class="action clear filter-clear"><span>Clear All</span></a>
+                            </div>
+                            <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle uppercase text-gray-700">Shopping
+                                Options</strong>
                             <div class="filter-options" id="narrow-by-list" data-role="content" data-mage-init='{
-        "accordion":{
-            "active": [0,1],
-            "collapsible": true,
-            "openedState": "active",
-            "multipleCollapsible": false,
-            "animate":{ "duration" :300, "easing":"easeOutCubic"},
-            "icons": {"header": "absolute right-0  top-4  fa fa-angle-down", "activeHeader": "absolute right-0  top-4  fa fa-angle-up"}
-        }}'>
+                                "accordion":{
+                                    "active": [0,1],
+                                    "collapsible": true,
+                                    "openedState": "active",
+                                    "multipleCollapsible": false,
+                                    "animate":{ "duration" :300, "easing":"easeOutCubic"},
+                                    "icons": {"header": "absolute right-0  top-4  fa fa-angle-down", "activeHeader": "absolute right-0  top-4  fa fa-angle-up"}
+                                }}'>
                                 <div data-role="collapsible" class="filter-options-item" attribute="cat">
                                     <div data-role="title"
                                         class="filter-options-title text-gray-600 py-3 border-b border-gray-200 uppercase relative cursor-pointer">
                                         Category</div>
-
+                        
                                     <div data-role="content" class="filter-options-content py-2">
                                         <ol class="items">
                                             <li class="item py-1">
@@ -1056,8 +1130,8 @@
                                         <ol class="items">
                                             <li class="item py-1">
                                                 <input type="checkbox"
-                                                    onchange="window.location.href='https://www.stunring.com/wedding.html?stone_color=84'" />
-                                                <a href="https://www.stunring.com/wedding.html?stone_color=84">
+                                                    onchange="window.location.href='{!! .Request.URL !!}?stone_color=84'" />
+                                                <a href="{!! .Request.URL !!}?stone_color=84">
                                                     White <span class="count">699<span
                                                             class="filter-count-label">items</span></span>
                                                 </a>

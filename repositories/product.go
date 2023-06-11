@@ -186,16 +186,17 @@ type PagedProducts struct {
 	Size     int              `json:"size"`
 }
 
-type Filter struct {
+type ProductsFilter struct {
 	MinPrice   float64 `json:"min_price"`
 	MaxPrice   float64 `json:"max_price"`
 	Color      string  `json:"color"`
 	CaratRange string  `json:"carat_range"`
 	StoneCut   string  `json:"stone_cut"`
 	PageSize   int     `json:"page_size"`
+	Page       int     `json:"page"`
 }
 
-func (r *ProductRepository) GetProductsByCategoryID(categoryID int, page int, size int, filter Filter) (PagedProducts, error) {
+func (r *ProductRepository) GetProductsByCategoryID(categoryID int, filter ProductsFilter) (PagedProducts, error) {
 	ctx := context.Background()
 
 	// 构建查询条件，匹配指定的Categories ID
@@ -204,7 +205,7 @@ func (r *ProductRepository) GetProductsByCategoryID(categoryID int, page int, si
 
 	// 添加价格筛选条件
 	if filter.MinPrice != 0 || filter.MaxPrice != 0 {
-		priceRangeQuery := elastic.NewRangeQuery("price")
+		priceRangeQuery := elastic.NewRangeQuery("CurrentPrice")
 		if filter.MinPrice != 0 {
 			priceRangeQuery.Gte(filter.MinPrice)
 		}
@@ -223,16 +224,23 @@ func (r *ProductRepository) GetProductsByCategoryID(categoryID int, page int, si
 		boolQuery.Filter(elastic.NewTermQuery("color", filter.Color))
 	}
 
-	// 计算从哪个位置开始返回结果
-	from := (page - 1) * size
+	if filter.Page <= 0 {
+		filter.Page = 1 // 设置默认的页码为1
+	}
 
+	if filter.PageSize <= 0 {
+		filter.PageSize = 24 // 设置默认的页面大小为24
+	}
+
+	// 计算从哪个位置开始返回结果
+	from := (filter.Page - 1) * filter.PageSize
 	// 构建搜索请求
 	searchResult, err := r.ES.Search().
-		Index("products"). // 设置索引名称为 "products"
-		Query(boolQuery).  // 设置查询条件
-		From(from).        // 设置从哪个位置开始返回结果
-		Size(size).        // 设置返回的最大文档数量
-		Do(ctx)            // 执行搜索
+		Index("products").     // 设置索引名称为 "products"
+		Query(boolQuery).      // 设置查询条件
+		From(from).            // 设置从哪个位置开始返回结果
+		Size(filter.PageSize). // 设置返回的最大文档数量
+		Do(ctx)                // 执行搜索
 
 	if err != nil {
 		// 处理搜索错误
@@ -241,8 +249,8 @@ func (r *ProductRepository) GetProductsByCategoryID(categoryID int, page int, si
 
 	// 计算总页数
 	total := int(searchResult.Hits.TotalHits.Value)
-	pages := total / size
-	if total%size > 0 {
+	pages := total / filter.PageSize
+	if total%filter.PageSize > 0 {
 		pages++
 	}
 
@@ -260,9 +268,9 @@ func (r *ProductRepository) GetProductsByCategoryID(categoryID int, page int, si
 
 	return PagedProducts{
 		Products: products,
-		Page:     page,
+		Page:     filter.Page,
 		Pages:    pages,
-		Size:     size,
+		Size:     filter.PageSize,
 	}, nil
 }
 

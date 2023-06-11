@@ -1,7 +1,6 @@
 package service
 
 import (
-	"swetelove/models"
 	"swetelove/repositories"
 )
 
@@ -17,6 +16,6 @@ func NewProductService() *ProductService {
 }
 
 // GetProductsByCategoryID 根据分类ID获取商品列表
-func (s *ProductService) GetProductsByCategoryID(categoryID int) ([]models.Product, error) {
-	return s.ProductRepository.GetProductsByCategoryID(categoryID)
+func (s *ProductService) GetProductsByCategoryID(categoryID int, filter repositories.ProductsFilter) (repositories.PagedProducts, error) {
+	return s.ProductRepository.GetProductsByCategoryID(categoryID, filter)
 }

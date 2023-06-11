@@ -1,7 +1,9 @@
 package models
 
 import (
+	"database/sql/driver"
 	"encoding/json"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -12,13 +14,38 @@ type Product struct {
 	OriginalPrice     float64 `gorm:"type:decimal(10,2)"`
 	CurrentPrice      float64 `gorm:"type:decimal(10,2)"`
 	OnSale            bool
-	Description       string `gorm:"type:text"`
-	VideoURL          string `gorm:"type:varchar(255)"`
+	Description       string  `gorm:"type:text"`
+	Detail            JSONMap `gorm:"type:json"`
+	VideoURL          string  `gorm:"type:varchar(255)"`
 	Sales             uint
 	ProductAttributes []ProductAttribute
 	Categories        []Category `gorm:"many2many:product_categories;"`
 	Images            []Image    `gorm:"polymorphic:Imageable;"`
 	Reviews           []Review
+}
+
+type JSONMap map[string]interface{}
+
+func (m *JSONMap) Scan(value interface{}) error {
+	if value == nil {
+		*m = nil
+		return nil
+	}
+
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("invalid type for JSONMap")
+	}
+
+	return json.Unmarshal(b, m)
+}
+
+func (m JSONMap) Value() (driver.Value, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return json.Marshal(m)
 }
 
 type Attribute struct {
