@@ -16,6 +16,6 @@ func NewProductService() *ProductService {
 }
 
 // GetProductsByCategoryID 根据分类ID获取商品列表
-func (s *ProductService) GetProductsByCategoryID(categoryID int, filter repositories.ProductsFilter) (repositories.PagedProducts, error) {
+func (s *ProductService) GetProductsByCategoryID(categoryID int, filter repositories.ProductListParams) (repositories.ProductListResult, error) {
 	return s.ProductRepository.GetProductsByCategoryID(categoryID, filter)
 }

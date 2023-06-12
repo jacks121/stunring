@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"net/http"
+	"fmt"
 	"strconv"
 	"strings"
 	"swetelove/repositories"
@@ -21,66 +21,77 @@ func NewCategoryController() *CategoryController {
 	}
 }
 
-// Show 处理显示分类的请求
 func (cc *CategoryController) Show(c *gin.Context) {
 	prefix := c.MustGet("template_prefix").(string)
-	categoryIDStr := c.Param("id")
-	categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
+	// 获取分类ID
+	categoryID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid category ID"})
+		c.JSON(500, gin.H{"error": "Invalid category ID"})
 		return
 	}
 
-	// Create a new ProductsFilter and populate it with the URL parameters
-	filter := repositories.ProductsFilter{}
-	if caratRange := c.Query("carat_range"); caratRange != "" {
-		filter.CaratRange = caratRange
+	// 创建ProductListParams
+	page, _ := strconv.Atoi(c.Query("p"))
+	pageSize, _ := strconv.Atoi(c.Query("page_size"))
+	if pageSize == 0 {
+		pageSize = 2 // 默认每页显示24个商品
 	}
-	if price := c.Query("price"); price != "" {
-		prices := strings.Split(price, "-")
-		if len(prices) == 2 {
-			minPrice, err := strconv.ParseFloat(prices[0], 64)
-			if err == nil {
-				filter.MinPrice = minPrice
-			}
-			maxPrice, err := strconv.ParseFloat(prices[1], 64)
-			if err == nil {
-				filter.MaxPrice = maxPrice
-			}
-		}
+	priceRangeStr := strings.Split(c.Query("price"), "-")
+	priceRange := [2]int{}
+	if len(priceRangeStr) == 2 {
+		priceRange[0], _ = strconv.Atoi(priceRangeStr[0])
+		priceRange[1], _ = strconv.Atoi(priceRangeStr[1])
 	}
-
-	if pageSize := c.Query("page_size"); pageSize != "" {
-		size, err := strconv.Atoi(pageSize)
-		if err == nil {
-			filter.PageSize = size
-		}
+	params := repositories.ProductListParams{
+		SortBy:     c.Query("product_list_order"),
+		Page:       page,
+		PageSize:   pageSize,
+		PriceRange: priceRange,
+		Filters: map[string]string{
+			"stone_cut":     c.Query("stone_cut"),
+			"stone_color":   c.Query("stone_color"),
+			"ring_crafting": c.Query("ring_crafting"),
+		},
 	}
 
-	if stoneCut := c.Query("stone_cut"); stoneCut != "" {
-		filter.StoneCut = stoneCut
-	}
-
-	if page := c.Query("page"); page != "" {
-		p, err := strconv.Atoi(page)
-		if err == nil {
-			filter.Page = p
-		}
-	}
-
-	products, err := cc.productService.GetProductsByCategoryID(int(categoryID), filter)
+	// 调用GetProductsByCategoryID函数
+	result, err := cc.productService.GetProductsByCategoryID(categoryID, params)
 	if err != nil {
-		// 处理错误
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
+		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
+
+	startPage := params.Page - 2
+	if startPage < 1 {
+		startPage = 1
+	}
+	endPage := startPage + 4
+	if endPage > result.TotalPages {
+		endPage = result.TotalPages
+	}
+	pages := make([]int, endPage-startPage+1)
+	for i := range pages {
+		pages[i] = startPage + i
+	}
+	nextPage := params.Page + 1
+	if nextPage > result.TotalPages {
+		nextPage = params.Page
+	}
+	fmt.Println("CurrentPage:", result.CurrentPage)
+	fmt.Println("TotalPages:", result.TotalPages)
+	fmt.Println("Pages:", pages)
+	fmt.Println("NextPage:", nextPage)
 
 	Render(c, prefix+"category.tmpl", gin.H{
-		"CategoryID": categoryID,
-		"Products":   products.Products,
-		"Page":       products.Page,
-		"Pages":      products.Pages,
-		"Size":       products.Size,
-		"Filter":     filter,
+		"CategoryID":  categoryID,
+		"Products":    result.Products,
+		"Params":      params,
+		"Size":        result.Size,
+		"CurrentPage": result.CurrentPage,
+		"TotalPages":  result.TotalPages,
+		"Pages":       pages,
+		"NextPage":    nextPage,
+		"Url":         c.Request.Host + c.Request.URL.Path,
+		"RawQuery":    c.Request.URL.RawQuery,
 	})
 }

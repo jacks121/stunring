@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"html/template"
 	"net/http"
 	"strconv"
 	"swetelove/controller"
@@ -41,6 +42,19 @@ func SetupRouter() *gin.Engine {
 	router.UseRawPath = true
 	router.Use(ChangeTemplateBasedOnDevice())
 	router.Delims("{!!", "!!}")
+	router.SetFuncMap(template.FuncMap{
+		"sub": func(a, b int) int { return a - b },
+		"add": func(a, b int) int { return a + b },
+		"lt":  func(a, b int) bool { return a < b },
+		"gt":  func(a, b int) bool { return a > b },
+		"seq": func(start, end int) []int {
+			seq := make([]int, end-start+1)
+			for i := range seq {
+				seq[i] = start + i
+			}
+			return seq
+		},
+	})
 	router.LoadHTMLGlob(TemplatesPath)
 	router.Static(StaticURL, StaticPath)
 

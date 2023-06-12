@@ -531,7 +531,7 @@
                                     $(document).ready(function () {
                                         $('.limiter-options').on('change', function () {
                                             var selectedValue = $(this).val();
-                                            var url = "{!! .Request.URL !!}";
+                                            var url = "";
                                             url = url.replace(/(\?|\&)page_size=[0-9]+/, ""); // 移除原有的limit参数
                                             if (url.indexOf("?") !== -1) {
                                                 url += "&page_size=" + selectedValue;
@@ -546,57 +546,49 @@
                             <div class="pages">
                                 <strong class="label pages-label" id="paging-label">Page</strong>
                                 <ul class="items pages-items" aria-labelledby="paging-label">
-
-
-
-                                    <li class="item current">
-                                        <strong class="page">
-                                            <span class="label">You&#039;re currently reading page</span>
-                                            <span>1</span>
-                                        </strong>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=2" class="page">
-                                            <span class="label">Page</span>
-                                            <span>2</span>
-                                        </a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=3" class="page">
-                                            <span class="label">Page</span>
-                                            <span>3</span>
-                                        </a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=4" class="page">
-                                            <span class="label">Page</span>
-                                            <span>4</span>
-                                        </a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=5" class="page">
-                                            <span class="label">Page</span>
-                                            <span>5</span>
-                                        </a>
-                                    </li>
-
-
-
-                                    <li class="item pages-item-next">
-                                        <a class="action  next" href="https://www.stunring.com/wedding.html?p=2"
-                                            title="Next">
-                                            <span class="label">Page</span>
-                                            <span>Next</span>
-                                        </a>
-                                    </li>
+                                    {!! $currentPage := .CurrentPage !!}
+                                    {!! $totalPages := .TotalPages !!}
+                                    {!! $startPage := sub $currentPage 2 !!}
+                                    {!! if lt $startPage 1 !!}{!! $startPage = 1 !!}{!! end !!}
+                                    {!! $endPage := add $startPage 4 !!}
+                                    {!! if gt $endPage $totalPages !!}{!! $endPage = $totalPages !!}{!! end !!}
+                                    {!! if gt $currentPage 1 !!}
+                                        <li class="item pages-item-previous">
+                                            <a class="action  previous" href="http://{!! $.Url !!}?p={!! sub $currentPage 1 !!}" title="Previous">
+                                                <span class="label">Page</span>
+                                                <span>Previous</span>
+                                            </a>
+                                        </li>
+                                    {!! end !!}
+                                    {!! range $page := seq $startPage $endPage !!}
+                                        {!! if eq $page $currentPage !!}
+                                            <li class="item current">
+                                                <strong class="page">
+                                                    <span class="label">You&#039;re currently reading page</span>
+                                                    <span>{!! $page !!}</span>
+                                                </strong>
+                                            </li>
+                                        {!! else !!}
+                                            <li class="item">
+                                                <a href="http://{!! $.Url !!}?p={!! $page !!}" class="page">
+                                                    <span class="label">Page</span>
+                                                    <span>{!! $page !!}</span>
+                                                </a>
+                                            </li>
+                                        {!! end !!}
+                                    {!! end !!}
+                                    {!! if lt $currentPage $totalPages !!}
+                                        <li class="item pages-item-next">
+                                            <a class="action  next" href="http://{!! $.Url !!}?p={!! add $currentPage 1 !!}"
+                                                title="Next">
+                                                <span class="label">Page</span>
+                                                <span>Next</span>
+                                            </a>
+                                        </li>
+                                    {!! end !!}
                                 </ul>
                             </div>
-
-
-
                         </div>
-
-
                     </div>
                     <div class="products wrapper mt-5 mb-10 grid products-grid">
                         <ol class="products list items product-items grid grid-cols-2 md:grid-cols-4 gap-3 ">
@@ -724,54 +716,41 @@
                                 </div>
                                 <span class="limiter-text">per page</span>
                             </div>
-
-
                             <div class="pages">
                                 <strong class="label pages-label" id="paging-label">Page</strong>
                                 <ul class="items pages-items" aria-labelledby="paging-label">
-
-
-
-                                    <li class="item current">
-                                        <strong class="page">
-                                            <span class="label">You&#039;re currently reading page</span>
-                                            <span>1</span>
-                                        </strong>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=2" class="page">
-                                            <span class="label">Page</span>
-                                            <span>2</span>
-                                        </a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=3" class="page">
-                                            <span class="label">Page</span>
-                                            <span>3</span>
-                                        </a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=4" class="page">
-                                            <span class="label">Page</span>
-                                            <span>4</span>
-                                        </a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="https://www.stunring.com/wedding.html?p=5" class="page">
-                                            <span class="label">Page</span>
-                                            <span>5</span>
-                                        </a>
-                                    </li>
-
-
-
-                                    <li class="item pages-item-next">
-                                        <a class="action  next" href="https://www.stunring.com/wedding.html?p=2"
-                                            title="Next">
-                                            <span class="label">Page</span>
-                                            <span>Next</span>
-                                        </a>
-                                    </li>
+                                    {!! $currentPage := .CurrentPage !!}
+                                    {!! $totalPages := .TotalPages !!}
+                                    {!! $startPage := sub $currentPage 2 !!}
+                                    {!! if lt $startPage 1 !!}{!! $startPage = 1 !!}{!! end !!}
+                                    {!! $endPage := add $startPage 4 !!}
+                                    {!! if gt $endPage $totalPages !!}{!! $endPage = $totalPages !!}{!! end !!}
+                                    {!! range $page := seq $startPage $endPage !!}
+                                        {!! if eq $page $currentPage !!}
+                                            <li class="item current">
+                                                <strong class="page">
+                                                    <span class="label">You&#039;re currently reading page</span>
+                                                    <span>{!! $page !!}</span>
+                                                </strong>
+                                            </li>
+                                        {!! else !!}
+                                            <li class="item">
+                                                <a href="https://www.stunring.com/wedding.html?p={!! $page !!}" class="page">
+                                                    <span class="label">Page</span>
+                                                    <span>{!! $page !!}</span>
+                                                </a>
+                                            </li>
+                                        {!! end !!}
+                                    {!! end !!}
+                                    {!! if lt $currentPage $totalPages !!}
+                                        <li class="item pages-item-next">
+                                            <a class="action  next" href="https://www.stunring.com/wedding.html?p={!! add $currentPage 1 !!}"
+                                                title="Next">
+                                                <span class="label">Page</span>
+                                                <span>Next</span>
+                                            </a>
+                                        </li>
+                                    {!! end !!}
                                 </ul>
                             </div>
                         </div>
@@ -824,7 +803,7 @@
                                 </ol>
                             </div>
                             <div class="block-actions filter-actions">
-                                <a href="{!! .Request.Url !!}" class="action clear filter-clear"><span>Clear All</span></a>
+                                <a href="" class="action clear filter-clear"><span>Clear All</span></a>
                             </div>
                             <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle uppercase text-gray-700">Shopping
                                 Options</strong>
@@ -1110,8 +1089,8 @@
                                         <ol class="items">
                                             <li class="item py-1">
                                                 <input type="checkbox"
-                                                    onchange="window.location.href='{!! .Request.URL !!}?stone_color=84'" />
-                                                <a href="{!! .Request.URL !!}?stone_color=84">
+                                                    onchange="window.location.href='?stone_color=84'" />
+                                                <a href="?stone_color=84">
                                                     White <span class="count">699<span
                                                             class="filter-count-label">items</span></span>
                                                 </a>
