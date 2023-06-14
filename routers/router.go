@@ -3,6 +3,7 @@ package routers
 import (
 	"html/template"
 	"net/http"
+	"net/url"
 	"strconv"
 	"swetelove/controller"
 	"swetelove/repositories"
@@ -43,10 +44,12 @@ func SetupRouter() *gin.Engine {
 	router.Use(ChangeTemplateBasedOnDevice())
 	router.Delims("{!!", "!!}")
 	router.SetFuncMap(template.FuncMap{
-		"sub": func(a, b int) int { return a - b },
-		"add": func(a, b int) int { return a + b },
-		"lt":  func(a, b int) bool { return a < b },
-		"gt":  func(a, b int) bool { return a > b },
+		"createURL":   createURL,
+		"intToString": IntToString,
+		"sub":         func(a, b int) int { return a - b },
+		"add":         func(a, b int) int { return a + b },
+		"lt":          func(a, b int) bool { return a < b },
+		"gt":          func(a, b int) bool { return a > b },
 		"seq": func(start, end int) []int {
 			seq := make([]int, end-start+1)
 			for i := range seq {
@@ -117,4 +120,30 @@ func ChangeTemplateBasedOnDevice() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+func mapToURLValues(params map[string]string) url.Values {
+	urlValues := url.Values{}
+	for key, value := range params {
+		urlValues.Add(key, value)
+	}
+	return urlValues
+}
+
+func createURL(params map[string]string, key string, value string) string {
+	// 创建新的参数map，并复制原有的参数
+	newParams := make(map[string]string)
+	for k, v := range params {
+		newParams[k] = v
+	}
+
+	// 更新参数
+	newParams[key] = value
+
+	// 返回新的URL
+	return "?" + mapToURLValues(newParams).Encode()
+}
+
+func IntToString(n int) string {
+	return strconv.Itoa(n)
 }

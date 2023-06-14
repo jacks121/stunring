@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"swetelove/repositories"
@@ -61,26 +60,17 @@ func (cc *CategoryController) Show(c *gin.Context) {
 		return
 	}
 
-	startPage := params.Page - 2
-	if startPage < 1 {
-		startPage = 1
+	// 创建一个 map 来保存查询参数
+	getParams := make(map[string]string)
+
+	// 获取所有查询参数
+	queryParams := c.Request.URL.Query()
+	for key, values := range queryParams {
+		// 只保存每个参数的第一个值
+		if len(values) > 0 {
+			getParams[key] = values[0]
+		}
 	}
-	endPage := startPage + 4
-	if endPage > result.TotalPages {
-		endPage = result.TotalPages
-	}
-	pages := make([]int, endPage-startPage+1)
-	for i := range pages {
-		pages[i] = startPage + i
-	}
-	nextPage := params.Page + 1
-	if nextPage > result.TotalPages {
-		nextPage = params.Page
-	}
-	fmt.Println("CurrentPage:", result.CurrentPage)
-	fmt.Println("TotalPages:", result.TotalPages)
-	fmt.Println("Pages:", pages)
-	fmt.Println("NextPage:", nextPage)
 
 	Render(c, prefix+"category.tmpl", gin.H{
 		"CategoryID":  categoryID,
@@ -89,9 +79,8 @@ func (cc *CategoryController) Show(c *gin.Context) {
 		"Size":        result.Size,
 		"CurrentPage": result.CurrentPage,
 		"TotalPages":  result.TotalPages,
-		"Pages":       pages,
-		"NextPage":    nextPage,
 		"Url":         c.Request.Host + c.Request.URL.Path,
 		"RawQuery":    c.Request.URL.RawQuery,
+		"GetParams":   getParams,
 	})
 }

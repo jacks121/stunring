@@ -526,19 +526,19 @@
                                 </div>
                                 <span class="limiter-text">per page</span>
                             </div>
-                            <script>
+                           <script>
                                 require(['jquery'], function ($) {
                                     $(document).ready(function () {
                                         $('.limiter-options').on('change', function () {
                                             var selectedValue = $(this).val();
-                                            var url = "";
-                                            url = url.replace(/(\?|\&)page_size=[0-9]+/, ""); // 移除原有的limit参数
+                                            var url = window.location.href; // 获取当前 URL
+                                            url = url.replace(/(\?|\&)page_size=[0-9]+/, ""); // 移除原有的 page_size 参数
                                             if (url.indexOf("?") !== -1) {
                                                 url += "&page_size=" + selectedValue;
                                             } else {
                                                 url += "?page_size=" + selectedValue;
                                             }
-                                            window.location.href = url;
+                                            window.location.href = url; // 重定向到新的 URL
                                         });
                                     });
                                 });
@@ -554,12 +554,13 @@
                                     {!! if gt $endPage $totalPages !!}{!! $endPage = $totalPages !!}{!! end !!}
                                     {!! if gt $currentPage 1 !!}
                                         <li class="item pages-item-previous">
-                                            <a class="action  previous" href="http://{!! $.Url !!}?p={!! sub $currentPage 1 !!}" title="Previous">
+                                            <a class="action  previous" href="http://{!! $.Url !!}{!! createURL .GetParams "p" (intToString (sub $currentPage 1)) !!}" title="Previous">
                                                 <span class="label">Page</span>
                                                 <span>Previous</span>
                                             </a>
                                         </li>
                                     {!! end !!}
+                                    {!! $getParams := .GetParams !!}
                                     {!! range $page := seq $startPage $endPage !!}
                                         {!! if eq $page $currentPage !!}
                                             <li class="item current">
@@ -570,7 +571,7 @@
                                             </li>
                                         {!! else !!}
                                             <li class="item">
-                                                <a href="http://{!! $.Url !!}?p={!! $page !!}" class="page">
+                                                <a href="http://{!! $.Url !!}{!! createURL $getParams "p" (intToString $page) !!}" class="page">
                                                     <span class="label">Page</span>
                                                     <span>{!! $page !!}</span>
                                                 </a>
@@ -579,7 +580,7 @@
                                     {!! end !!}
                                     {!! if lt $currentPage $totalPages !!}
                                         <li class="item pages-item-next">
-                                            <a class="action  next" href="http://{!! $.Url !!}?p={!! add $currentPage 1 !!}"
+                                            <a class="action  next" href="http://{!! $.Url !!}{!! createURL .GetParams "p" (intToString (add $currentPage 1)) !!}"
                                                 title="Next">
                                                 <span class="label">Page</span>
                                                 <span>Next</span>
@@ -725,6 +726,15 @@
                                     {!! if lt $startPage 1 !!}{!! $startPage = 1 !!}{!! end !!}
                                     {!! $endPage := add $startPage 4 !!}
                                     {!! if gt $endPage $totalPages !!}{!! $endPage = $totalPages !!}{!! end !!}
+                                    {!! if gt $currentPage 1 !!}
+                                        <li class="item pages-item-previous">
+                                            <a class="action  previous" href="http://{!! $.Url !!}{!! createURL .GetParams "p" (intToString (sub $currentPage 1)) !!}" title="Previous">
+                                                <span class="label">Page</span>
+                                                <span>Previous</span>
+                                            </a>
+                                        </li>
+                                    {!! end !!}
+                                    {!! $getParams := .GetParams !!}
                                     {!! range $page := seq $startPage $endPage !!}
                                         {!! if eq $page $currentPage !!}
                                             <li class="item current">
@@ -735,7 +745,7 @@
                                             </li>
                                         {!! else !!}
                                             <li class="item">
-                                                <a href="https://www.stunring.com/wedding.html?p={!! $page !!}" class="page">
+                                                <a href="http://{!! $.Url !!}{!! createURL $getParams "p" (intToString $page) !!}" class="page">
                                                     <span class="label">Page</span>
                                                     <span>{!! $page !!}</span>
                                                 </a>
@@ -744,7 +754,7 @@
                                     {!! end !!}
                                     {!! if lt $currentPage $totalPages !!}
                                         <li class="item pages-item-next">
-                                            <a class="action  next" href="https://www.stunring.com/wedding.html?p={!! add $currentPage 1 !!}"
+                                            <a class="action  next" href="http://{!! $.Url !!}{!! createURL .GetParams "p" (intToString (add $currentPage 1)) !!}"
                                                 title="Next">
                                                 <span class="label">Page</span>
                                                 <span>Next</span>
