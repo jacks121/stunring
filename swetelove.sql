@@ -447,7 +447,7 @@ DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '记录ID',
   `code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '设置代码',
-  `value` text COLLATE utf8mb4_general_ci COMMENT '设置值',
+  `value` json DEFAULT NULL COMMENT '设置值',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间戳',
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更新时间戳',
   PRIMARY KEY (`id`)
@@ -456,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 -- 正在导出表  swetelove.settings 的数据：~1 rows (大约)
 DELETE FROM `settings`;
 INSERT INTO `settings` (`id`, `code`, `value`, `created_at`, `updated_at`) VALUES
-	(1, 'filter', '{"price":["0.00-50.00","50.00-100.00","100.00-150.00","150.00-200.00","200.00-250.00","250.00-300.00","300.00-350.00","350.00-400.00","400.00-450.00","600.00-9999.00"],"stone_cut":["round","oval","cushion","emerald","pear","heart","radiant","asscher","baguette","triangle","marquise","princess"],"stone_color":["white","ruby_red","aquamarine_blue","sapphire_blue","blue_topaz","emerald_green","peridot_green","fancy_pink","yellow","multicolor","champagne_morganite","black","orange","amethyst_purple","chocolate","watermelon","pearl"],"carat_range":["0-1.00","1.00-1.50","1.50-2.00","2.00-3.00","3.00-4.00","4.00-1000"],"plating_color":["platinum","yellow_gold","rose_gold","black","two_tone"],"style":["classic","vintage","cocktail_rings","anniversary","art_deco","heart","knot_bowknot_rope","solitaire","eternity","half_eternity","halo","three_stone","multi_row","single_row","split_shank","promise_rings","trio_wedding_sets","skull","animal","nature"],"occasion":["valentines_day","mothers_day","fathers_day","birthday","thanksgiving_day","merry_christmas","halloween","graduation"],"recipient":["for_her","for_him","for_mom","for_dad","for_kids","for_friends","for_couples"]}', '2023-06-15 06:47:39', '2023-06-15 06:47:39');
+	(1, 'filter', '{"price": ["0.00-50.00", "50.00-100.00", "100.00-150.00", "150.00-200.00", "200.00-250.00", "250.00-300.00", "300.00-350.00", "350.00-400.00", "400.00-450.00", "600.00_and_above"], "style": ["classic", "vintage", "cocktail_rings", "anniversary", "art_deco", "heart", "knot_bowknot_rope", "solitaire", "eternity", "half_eternity", "halo", "three_stone", "multi_row", "single_row", "split_shank", "promise_rings", "trio_wedding_sets", "skull", "animal", "nature"], "occasion": ["valentines_day", "mothers_day", "fathers_day", "birthday", "thanksgiving_day", "merry_christmas", "halloween", "graduation"], "recipient": ["for_her", "for_him", "for_mom", "for_dad", "for_kids", "for_friends", "for_couples"], "stone_cut": ["round", "oval", "cushion", "emerald", "pear", "heart", "radiant", "asscher", "baguette", "triangle", "marquise", "princess"], "carat_range": ["0-1.00", "1.00-1.50", "1.50-2.00", "2.00-3.00", "3.00-4.00", "4.00-1000"], "stone_color": ["white", "ruby_red", "aquamarine_blue", "sapphire_blue", "blue_topaz", "emerald_green", "peridot_green", "fancy_pink", "yellow", "multicolor", "champagne_morganite", "black", "orange", "amethyst_purple", "chocolate", "watermelon", "pearl"], "plating_color": ["platinum", "yellow_gold", "rose_gold", "black", "two_tone"]}', '2023-06-15 06:47:39', '2023-06-15 06:47:39');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

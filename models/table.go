@@ -129,9 +129,9 @@ type Collection struct {
 }
 
 type Settings struct {
-	ID        uint      `gorm:"primaryKey"`
-	Code      string    `gorm:"type:varchar(255);comment:设置代码"`
-	Value     string    `gorm:"type:text;comment:设置值"`
-	CreatedAt time.Time `gorm:"comment:记录创建时间戳"`
-	UpdatedAt time.Time `gorm:"comment:记录更新时间戳"`
+	ID        uint   `gorm:"primaryKey"`
+	Code      string `gorm:"type:varchar(255);"`
+	Value     string `gorm:"type:json;"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
