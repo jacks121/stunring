@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -125,4 +126,12 @@ type Collection struct {
 	Type string          `gorm:"type:varchar(255)"`
 	Code string          `gorm:"type:varchar(255)"`
 	Rule json.RawMessage `gorm:"type:json"`
+}
+
+type Settings struct {
+	ID        uint      `gorm:"primaryKey"`
+	Code      string    `gorm:"type:varchar(255);comment:设置代码"`
+	Value     string    `gorm:"type:text;comment:设置值"`
+	CreatedAt time.Time `gorm:"comment:记录创建时间戳"`
+	UpdatedAt time.Time `gorm:"comment:记录更新时间戳"`
 }

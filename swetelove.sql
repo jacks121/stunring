@@ -16,10 +16,12 @@
 
 
 -- 导出 swetelove 的数据库结构
+DROP DATABASE IF EXISTS `swetelove`;
 CREATE DATABASE IF NOT EXISTS `swetelove` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `swetelove`;
 
 -- 导出  表 swetelove.advertisements 结构
+DROP TABLE IF EXISTS `advertisements`;
 CREATE TABLE IF NOT EXISTS `advertisements` (
   `id` int NOT NULL AUTO_INCREMENT,
   `code` varchar(255) NOT NULL,
@@ -36,6 +38,7 @@ INSERT INTO `advertisements` (`id`, `code`, `created_at`, `updated_at`, `deleted
 	(2, 'category_banner', '2023-06-01 01:28:17', '2023-06-01 01:28:17', NULL);
 
 -- 导出  表 swetelove.attributes 结构
+DROP TABLE IF EXISTS `attributes`;
 CREATE TABLE IF NOT EXISTS `attributes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `attribute_name` varchar(255) DEFAULT NULL COMMENT '属性名称',
@@ -60,6 +63,7 @@ INSERT INTO `attributes` (`id`, `attribute_name`, `created_at`, `updated_at`, `d
 	(10, 'Price Range', '2023-06-04 13:03:43', '2023-06-04 13:03:43', NULL);
 
 -- 导出  表 swetelove.attribute_values 结构
+DROP TABLE IF EXISTS `attribute_values`;
 CREATE TABLE IF NOT EXISTS `attribute_values` (
   `id` int NOT NULL AUTO_INCREMENT,
   `attribute_id` int NOT NULL,
@@ -122,6 +126,7 @@ INSERT INTO `attribute_values` (`id`, `attribute_id`, `value`, `created_at`, `up
 	(47, 10, '$500-$1000', '2023-06-04 13:05:35', '2023-06-04 13:05:35', NULL);
 
 -- 导出  表 swetelove.categories 结构
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `parent_id` int DEFAULT '0',
@@ -169,6 +174,7 @@ INSERT INTO `categories` (`id`, `parent_id`, `category_name`, `url`, `created_at
 	(31, 23, 'Father\'s Day', '/collection/father-s-day.html', NULL, NULL, NULL);
 
 -- 导出  表 swetelove.collections 结构
+DROP TABLE IF EXISTS `collections`;
 CREATE TABLE IF NOT EXISTS `collections` (
   `id` int NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -188,6 +194,7 @@ INSERT INTO `collections` (`id`, `created_at`, `updated_at`, `deleted_at`, `name
 	(2, '2023-06-06 14:21:17', '2023-06-05 13:54:40', NULL, 'top sellers', 'top', 'sales', '{"limit": 10}');
 
 -- 导出  表 swetelove.currencies 结构
+DROP TABLE IF EXISTS `currencies`;
 CREATE TABLE IF NOT EXISTS `currencies` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `created_at` datetime(6) NOT NULL,
@@ -212,6 +219,7 @@ INSERT INTO `currencies` (`id`, `created_at`, `updated_at`, `deleted_at`, `code`
 	(9, '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000', NULL, 'SGD', 5.00);
 
 -- 导出  表 swetelove.images 结构
+DROP TABLE IF EXISTS `images`;
 CREATE TABLE IF NOT EXISTS `images` (
   `id` int NOT NULL AUTO_INCREMENT,
   `image_url` varchar(255) DEFAULT NULL COMMENT '图片链接',
@@ -222,9 +230,9 @@ CREATE TABLE IF NOT EXISTS `images` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='图片表';
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='图片表';
 
--- 正在导出表  swetelove.images 的数据：~37 rows (大约)
+-- 正在导出表  swetelove.images 的数据：~47 rows (大约)
 DELETE FROM `images`;
 INSERT INTO `images` (`id`, `image_url`, `link`, `imageable_id`, `imageable_type`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(7, 'https://cdn.stunring.com/media/wysiwyg/2023_wedding_sale/WEDDING_BAND.jpg', NULL, 3, 'categories', '2023-05-18 14:08:06', '2023-05-18 14:08:06', NULL),
@@ -263,9 +271,20 @@ INSERT INTO `images` (`id`, `image_url`, `link`, `imageable_id`, `imageable_type
 	(40, 'https://cdn.stunring.com/media/catalog/product/cache/46f2d94ea07d2b11b96d96cb65477d04/e/a/eark049-5.jpg', NULL, 10, 'products', '2023-05-18 14:09:39', '2023-05-18 14:09:39', NULL),
 	(41, 'https://cdn.stunring.com/media/catalog/product/cache/46f2d94ea07d2b11b96d96cb65477d04/2/9/2930415_4.jpg', NULL, 11, 'products', '2023-05-18 14:09:39', '2023-05-18 14:09:39', NULL),
 	(42, 'https://cdn.stunring.com/media/catalog/product/cache/46f2d94ea07d2b11b96d96cb65477d04/e/l/el294_6104d176baddc.jpg', NULL, 12, 'products', '2023-05-18 14:09:39', '2023-05-18 14:09:39', NULL),
-	(43, 'https://cdn.stunring.com/media/catalog/product/cache/46f2d94ea07d2b11b96d96cb65477d04/2/1/2130410_2.jpg', NULL, 13, 'products', '2023-05-18 14:09:39', '2023-05-18 14:09:39', NULL);
+	(43, 'https://cdn.stunring.com/media/catalog/product/cache/46f2d94ea07d2b11b96d96cb65477d04/2/1/2130410_2.jpg', NULL, 13, 'products', '2023-05-18 14:09:39', '2023-05-18 14:09:39', NULL),
+	(44, 'https://cdn.stunring.com/media/review_images/d/i/dingtalk_20230602144445.jpg', NULL, 1, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(45, 'https://cdn.stunring.com/media/review_images/2/5/2530537-5.jpg', NULL, 2, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(46, 'https://cdn.stunring.com/media/review_images/_/_/__20230427154032.png', NULL, 3, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(47, 'https://cdn.stunring.com/media/review_images/2/5/2530537-6.jpg', NULL, 4, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(48, 'https://cdn.stunring.com/media/review_images/_/1/_1_.jpg', NULL, 5, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(49, 'https://cdn.stunring.com/media/review_images/l/q/lqlpjw3dovt4wsjna8dnahywbk6ltad-pcaeeidinodmaa_540_960.png', NULL, 6, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(50, 'https://cdn.stunring.com/media/review_images/2/8/284725477_10223201818608621_2801487919247514155_n.jpg', NULL, 7, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(51, 'https://cdn.stunring.com/media/review_images/2/5/2530537-8.jpg', NULL, 8, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(52, 'https://cdn.stunring.com/media/review_images/_/1/_1080_1920.png', NULL, 9, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL),
+	(53, 'https://cdn.stunring.com/media/review_images/1/_/1.jpg', NULL, 10, 'reviews', '2023-06-07 14:35:46', '2023-06-07 14:35:46', NULL);
 
 -- 导出  表 swetelove.products 结构
+DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_name` varchar(255) DEFAULT NULL COMMENT '商品名称',
@@ -284,29 +303,30 @@ CREATE TABLE IF NOT EXISTS `products` (
 -- 正在导出表  swetelove.products 的数据：~21 rows (大约)
 DELETE FROM `products`;
 INSERT INTO `products` (`id`, `product_name`, `original_price`, `current_price`, `on_sale`, `description`, `video_url`, `sales`, `created_at`, `updated_at`, `deleted_at`) VALUES
-	(4, 'Product 1', 100.00, 90.00, 1, 'This is product 1', 'http://product1.video', 99, '2023-05-11 14:05:26', '2023-05-18 14:05:26', NULL),
-	(5, 'Product 24343', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 98, '2023-05-12 14:05:26', '2023-05-18 14:05:26', NULL),
-	(6, 'Product 3', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 97, '2023-05-13 14:05:26', '2023-05-18 14:05:26', NULL),
-	(7, 'Product 4', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 96, '2023-05-14 14:05:26', '2023-05-18 14:05:26', NULL),
-	(8, 'Product 5', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 95, '2023-05-15 14:05:26', '2023-05-18 14:05:26', NULL),
-	(9, 'Product 6', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 94, '2023-05-16 14:05:26', '2023-05-18 14:05:26', NULL),
-	(10, 'Product 7', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 88, '2023-05-17 14:05:26', '2023-05-18 14:05:26', NULL),
-	(11, 'Product 8', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 89, '2023-05-18 14:01:26', '2023-05-18 14:05:26', NULL),
-	(12, 'Product 9', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 87, '2023-05-18 14:02:26', '2023-05-18 14:05:26', NULL),
-	(13, 'Product 10', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 987, '2023-05-18 14:03:26', '2023-05-18 14:05:26', NULL),
-	(14, 'Product d', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 12, '2023-05-18 14:04:26', '2023-05-18 14:05:26', NULL),
-	(15, 'Product 32', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 13, '2023-05-18 14:05:26', '2023-05-18 14:05:26', NULL),
-	(16, 'Product fd4', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 14, '2023-06-18 14:05:26', '2023-05-18 14:05:26', NULL),
-	(17, 'Product 35', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 15, '2023-05-21 14:05:26', '2023-05-18 14:05:26', NULL),
-	(18, 'Product jk89', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 21, '2023-05-22 14:05:26', '2023-05-18 14:05:26', NULL),
-	(19, 'Product d6', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 22, '2023-05-23 14:05:26', '2023-05-18 14:05:26', NULL),
-	(20, 'Product l;9', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 23, '2023-05-24 14:05:26', '2023-05-18 14:05:26', NULL),
-	(21, 'Product d5', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 24, '2023-05-25 14:05:26', '2023-05-18 14:05:26', NULL),
-	(22, 'Product j90', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 25, '2023-05-26 14:05:26', '2023-05-18 14:05:26', NULL),
-	(23, 'Product ds7', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 31, '2023-05-26 23:05:26', '2023-05-18 14:05:26', NULL),
+	(4, 'Product 1', 100.00, 1.00, 1, 'This is product 1', 'http://product1.video', 99, '2023-05-11 14:05:26', '2023-05-18 14:05:26', NULL),
+	(5, 'Product 24343', 110.00, 2.00, 1, 'This is product 2', 'http://product2.video', 98, '2023-05-12 14:05:26', '2023-05-18 14:05:26', NULL),
+	(6, 'Product 3', 110.00, 2.00, 1, 'This is product 2', 'http://product2.video', 97, '2023-05-13 14:05:26', '2023-05-18 14:05:26', NULL),
+	(7, 'Product 4', 110.00, 3.00, 1, 'This is product 2', 'http://product2.video', 96, '2023-05-14 14:05:26', '2023-05-18 14:05:26', NULL),
+	(8, 'Product 5', 110.00, 4.00, 1, 'This is product 2', 'http://product2.video', 95, '2023-05-15 14:05:26', '2023-05-18 14:05:26', NULL),
+	(9, 'Product 6', 110.00, 5.00, 1, 'This is product 2', 'http://product2.video', 94, '2023-05-16 14:05:26', '2023-05-18 14:05:26', NULL),
+	(10, 'Product 7', 110.00, 6.00, 1, 'This is product 2', 'http://product2.video', 88, '2023-05-17 14:05:26', '2023-05-18 14:05:26', NULL),
+	(11, 'Product 8', 110.00, 7.00, 1, 'This is product 2', 'http://product2.video', 89, '2023-05-18 14:01:26', '2023-05-18 14:05:26', NULL),
+	(12, 'Product 9', 110.00, 8.00, 1, 'This is product 2', 'http://product2.video', 87, '2023-05-18 14:02:26', '2023-05-18 14:05:26', NULL),
+	(13, 'Product 10', 110.00, 11.00, 1, 'This is product 2', 'http://product2.video', 987, '2023-05-18 14:03:26', '2023-05-18 14:05:26', NULL),
+	(14, 'Product d', 110.00, 12.00, 1, 'This is product 2', 'http://product2.video', 12, '2023-05-18 14:04:26', '2023-05-18 14:05:26', NULL),
+	(15, 'Product 32', 110.00, 13.00, 1, 'This is product 2', 'http://product2.video', 13, '2023-05-18 14:05:26', '2023-05-18 14:05:26', NULL),
+	(16, 'Product fd4', 110.00, 14.00, 1, 'This is product 2', 'http://product2.video', 14, '2023-06-18 14:05:26', '2023-05-18 14:05:26', NULL),
+	(17, 'Product 35', 110.00, 15.00, 1, 'This is product 2', 'http://product2.video', 15, '2023-05-21 14:05:26', '2023-05-18 14:05:26', NULL),
+	(18, 'Product jk89', 110.00, 16.00, 1, 'This is product 2', 'http://product2.video', 21, '2023-05-22 14:05:26', '2023-05-18 14:05:26', NULL),
+	(19, 'Product d6', 110.00, 21.00, 1, 'This is product 2', 'http://product2.video', 22, '2023-05-23 14:05:26', '2023-05-18 14:05:26', NULL),
+	(20, 'Product l;9', 110.00, 22.00, 1, 'This is product 2', 'http://product2.video', 23, '2023-05-24 14:05:26', '2023-05-18 14:05:26', NULL),
+	(21, 'Product d5', 110.00, 23.00, 1, 'This is product 2', 'http://product2.video', 24, '2023-05-25 14:05:26', '2023-05-18 14:05:26', NULL),
+	(22, 'Product j90', 110.00, 24.00, 1, 'This is product 2', 'http://product2.video', 25, '2023-05-26 14:05:26', '2023-05-18 14:05:26', NULL),
+	(23, 'Product ds7', 110.00, 25.00, 1, 'This is product 2', 'http://product2.video', 31, '2023-05-26 23:05:26', '2023-05-18 14:05:26', NULL),
 	(24, 'Product p9', 110.00, 99.00, 1, 'This is product 2', 'http://product2.video', 32, '2023-05-28 14:05:26', '2023-05-18 14:05:26', NULL);
 
 -- 导出  表 swetelove.product_attributes 结构
+DROP TABLE IF EXISTS `product_attributes`;
 CREATE TABLE IF NOT EXISTS `product_attributes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int NOT NULL COMMENT '商品ID',
@@ -353,6 +373,7 @@ INSERT INTO `product_attributes` (`id`, `product_id`, `attribute_id`, `value_id`
 	(29, 6, 6, 29, -10.00, '2023-06-04 13:11:49', '2023-06-04 13:11:49', NULL);
 
 -- 导出  表 swetelove.product_categories 结构
+DROP TABLE IF EXISTS `product_categories`;
 CREATE TABLE IF NOT EXISTS `product_categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int NOT NULL COMMENT '商品ID',
@@ -362,15 +383,37 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品分类表';
 
--- 正在导出表  swetelove.product_categories 的数据：~2 rows (大约)
+-- 正在导出表  swetelove.product_categories 的数据：~23 rows (大约)
 DELETE FROM `product_categories`;
 INSERT INTO `product_categories` (`id`, `product_id`, `category_id`, `parent_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(7, 4, 1, NULL, '2023-05-18 14:11:11', '2023-05-18 14:11:11', NULL),
-	(8, 5, 2, NULL, '2023-05-18 14:11:11', '2023-05-18 14:11:11', NULL);
+	(8, 5, 2, NULL, '2023-05-18 14:11:11', '2023-05-18 14:11:11', NULL),
+	(9, 4, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(10, 5, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(11, 6, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(12, 7, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(13, 8, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(14, 9, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(15, 10, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(16, 11, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(17, 12, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(18, 13, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(19, 14, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(20, 15, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(21, 16, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(22, 17, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(23, 18, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(24, 19, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(25, 20, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(26, 21, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(27, 22, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(28, 23, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL),
+	(29, 24, 1, NULL, '2023-06-12 11:58:37', '2023-06-12 11:58:37', NULL);
 
 -- 导出  表 swetelove.reviews 结构
+DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE IF NOT EXISTS `reviews` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int DEFAULT NULL COMMENT '商品ID',
@@ -386,18 +429,34 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 -- 正在导出表  swetelove.reviews 的数据：~12 rows (大约)
 DELETE FROM `reviews`;
 INSERT INTO `reviews` (`id`, `product_id`, `user_id`, `rating`, `review_text`, `created_at`, `updated_at`, `deleted_at`) VALUES
-	(7, 4, 1, 5, 'Great product!', '2023-05-18 14:10:44', '2023-05-18 14:10:44', NULL),
-	(8, 5, 2, 4, 'Good product!', '2023-05-18 14:10:44', '2023-05-18 14:10:44', NULL),
-	(9, 1, 1, 5, 'I love this ring! It is so beautiful and sparkly.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(10, 1, 2, 4, 'This ring is very nice but a bit too expensive for me.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(11, 1, 3, 3, 'The ring is okay but the color is not what I expected.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(12, 1, 4, 2, 'I don’t like this ring at all. It looks cheap and fake.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(13, 1, 5, 1, 'This ring is terrible! It broke after one week of wearing it.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(14, 2, 6, 5, 'This necklace is amazing! It is so elegant and classy.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(15, 2, 7, 4, 'This necklace is pretty but a bit too long for me.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
-	(16, 2, 8, 3, 'The necklace is fine but the pearls are not very shiny.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(1, 4, 1, 5, 'Great product!', '2023-05-18 14:10:44', '2023-05-18 14:10:44', NULL),
+	(2, 5, 2, 4, 'Good product!', '2023-05-18 14:10:44', '2023-05-18 14:10:44', NULL),
+	(3, 1, 1, 5, 'I love this ring! It is so beautiful and sparkly.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(4, 1, 2, 4, 'This ring is very nice but a bit too expensive for me.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(5, 1, 3, 3, 'The ring is okay but the color is not what I expected.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(6, 1, 4, 2, 'I don’t like this ring at all. It looks cheap and fake.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(7, 1, 5, 1, 'This ring is terrible! It broke after one week of wearing it.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(8, 2, 6, 5, 'This necklace is amazing! It is so elegant and classy.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(9, 2, 7, 4, 'This necklace is pretty but a bit too long for me.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
+	(10, 2, 8, 3, 'The necklace is fine but the pearls are not very shiny.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
 	(17, 2, 9, 2, 'I hate this necklace! It is so heavy and uncomfortable.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL),
 	(18, 2, 10, 1, 'This necklace is awful! It gave me a rash on my neck.', '2023-06-04 13:14:09', '2023-06-04 13:14:09', NULL);
+
+-- 导出  表 swetelove.settings 结构
+DROP TABLE IF EXISTS `settings`;
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '记录ID',
+  `code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '设置代码',
+  `value` text COLLATE utf8mb4_general_ci COMMENT '设置值',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间戳',
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更新时间戳',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 正在导出表  swetelove.settings 的数据：~1 rows (大约)
+DELETE FROM `settings`;
+INSERT INTO `settings` (`id`, `code`, `value`, `created_at`, `updated_at`) VALUES
+	(1, 'filter', '{"price":["0.00-50.00","50.00-100.00","100.00-150.00","150.00-200.00","200.00-250.00","250.00-300.00","300.00-350.00","350.00-400.00","400.00-450.00","600.00-9999.00"],"stone_cut":["round","oval","cushion","emerald","pear","heart","radiant","asscher","baguette","triangle","marquise","princess"],"stone_color":["white","ruby_red","aquamarine_blue","sapphire_blue","blue_topaz","emerald_green","peridot_green","fancy_pink","yellow","multicolor","champagne_morganite","black","orange","amethyst_purple","chocolate","watermelon","pearl"],"carat_range":["0-1.00","1.00-1.50","1.50-2.00","2.00-3.00","3.00-4.00","4.00-1000"],"plating_color":["platinum","yellow_gold","rose_gold","black","two_tone"],"style":["classic","vintage","cocktail_rings","anniversary","art_deco","heart","knot_bowknot_rope","solitaire","eternity","half_eternity","halo","three_stone","multi_row","single_row","split_shank","promise_rings","trio_wedding_sets","skull","animal","nature"],"occasion":["valentines_day","mothers_day","fathers_day","birthday","thanksgiving_day","merry_christmas","halloween","graduation"],"recipient":["for_her","for_him","for_mom","for_dad","for_kids","for_friends","for_couples"]}', '2023-06-15 06:47:39', '2023-06-15 06:47:39');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
