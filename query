@@ -1,0 +1,18 @@
+{
+    "size": 0, 
+    "query": {
+        "match_all": {}
+    },
+    "aggs": {
+        "by_plating_color": {
+            "terms": {
+                "field": "Detail.Plating Color.keyword"
+            }
+        },
+        "by_stone_cut": {
+            "terms": {
+                "field": "Detail.Stone Cut.keyword"
+            }
+        }
+    }
+}
