@@ -129,9 +129,9 @@ type Collection struct {
 }
 
 type Settings struct {
-	ID        uint   `gorm:"primaryKey"`
-	Code      string `gorm:"type:varchar(255);"`
-	Value     string `gorm:"type:json;"`
+	ID        uint    `gorm:"primaryKey"`
+	Code      string  `gorm:"type:varchar(255);"`
+	Value     JSONMap `gorm:"type:json;"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
